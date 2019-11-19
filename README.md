@@ -3,7 +3,7 @@ A repository for my Quoridor game for GLO1901 project\
 URL: https://github.com/SamuelYergeau/GLO1901_Projet2\
 \
 To setup your Github account:\
---> the commits are evaluated, so make sure we can know who did the commit:
+the commits are evaluated, so make sure we can know who did the commit:
 * Use your school email (@ulaval.ca)
 * Use your real name as username\
 \
