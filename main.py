@@ -314,5 +314,4 @@ debutee = quoridor.Quoridor(["Sampai", "Senpai"])
 #print('str jeton déplacé:', debutee)
 #debutee.placer_mur(1, (5, 5), 'horizontal') # Tester placer_mur --> OK
 #print('str jmur placé:', debutee)
-debutee.jouer_coup(1) # Tester jouer_coup --> does not move the piece!
-print(debutee)
+#debutee.jouer_coup(1) # Tester jouer_coup --> OK

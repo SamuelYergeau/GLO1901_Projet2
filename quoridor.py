@@ -313,7 +313,8 @@ class Quoridor:
         )
         # vérifier si la partie est déjà terminée
         # TODO: compléter
-        coup_a_jouer = nx.shortest_path(graphe, self.joueurs[(joueur - 1)]['pos'], 'B1')[0]
+        coup_a_jouer = nx.shortest_path(graphe, self.joueurs[(joueur - 1)]['pos'], 'B1')[1]
+        print(coup_a_jouer)
         # jouer le coup
         # TODO: compléter
 
