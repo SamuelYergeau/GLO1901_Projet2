@@ -294,5 +294,19 @@ if __name__ == "__main__":
 
 
 # fonction pour tester le projet 2
-q = quoridor.Quoridor(["Sampai", "Senpai"])
-print(str(q))
+finished_game = {
+                    "joueurs": [
+                        {"nom": "idul", "murs": 7, "pos": [5, 9]},
+                        {"nom": "automate", "murs": 3, "pos": [5, 7]}
+                    ],
+                    "murs": {
+                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+                    }
+                }
+debutee = quoridor.Quoridor(["Sampai", "Senpai"])
+terminee = quoridor.Quoridor(finished_game['joueurs'], finished_game['murs'])
+print('str debutée:', str(debutee)) #tester __init__ et __str__ --> OK
+print('str terminée:', str(terminee))
+print('etat_partie:', debutee.état_partie()) # tester état_partie --> OK
+print('eteminé_partie:', terminee.partie_terminée()) # tester partie_terminée -->

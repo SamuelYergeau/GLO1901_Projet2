@@ -120,12 +120,12 @@ class Quoridor:
                 # Vérifier si la position du mur est valide
                 if 1 < mur[0] > 8 and 2 < mur[1] > 9:
                     raise QuoridorError("position du mur non-valide!")
-                self.murh += mur
+                self.murh += [mur]
             # itérer sur chaque mur vertical
             for mur in murs['verticaux']:
                 if 2 < mur[0] > 9 and 1 < mur[1] > 8:
                     raise QuoridorError("position du mur non-valide!")
-                self.murv += mur
+                self.murv += [mur]
         # vérifier que joueurs est itérable et de longueur 2
         if len(joueurs) != 2:
             raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
@@ -146,7 +146,7 @@ class Quoridor:
                 if  0 < joueur['murs'] > 10:
                     raise QuoridorError("mauvais nombre de murs!")
                 # Vérifier que la position du joueur est valide
-                if 1 < joueur['pos'] > 9:
+                if 1 < joueur['pos'][0] > 9 and 1 < joueur['pos'][1] > 9:
                     raise QuoridorError("position du joueur invalide!")
                 # updater la valeur de joueur
                 self.joueurs[numero] = joueur
