@@ -5,6 +5,7 @@ contient les classes:
     - Quoridor
     - QuoridorError(Exception)
 """
+
 import networkx as nx
 
 
