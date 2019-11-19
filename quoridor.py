@@ -5,7 +5,6 @@ contient les classes:
     - Quoridor
     - QuoridorError(Exception)
 """
-
 import networkx as nx
 
 
@@ -106,9 +105,11 @@ class Quoridor:
                 murs horizontaux dans la partie
         """
         # définir les attribut de classes que nous allons utiliser
-        self.joueurs = []
+        self.joueurs = [{'nom':'', 'murs': 0, 'pos':(0,0)},
+                        {'nom':'', 'murs': 0, 'pos':(0,0)}]
         self.murh = []
         self.murv = []
+        starting_position = [(5, 1), (5, 9)]
         # vérifier si un dictionnaire de murs est présent
         if murs:
             # vérifier si murs est un tuple
@@ -125,9 +126,6 @@ class Quoridor:
                 if 2 < mur[0] > 9 and 1 < mur[1] > 8:
                     raise QuoridorError("position du mur non-valide!")
                 self.murv += mur
-        # Vérifier que le total des murs donne 20
-        if (len(self.murh) + len(self.murv) + joueurs[0]['murs'] + joueurs[1]['murs']) != 20:
-            raise QuoridorError("mauvaise quantité totale de murs!")
         # vérifier que joueurs est itérable et de longueur 2
         if len(joueurs) != 2:
             raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
@@ -136,19 +134,12 @@ class Quoridor:
             # Vérifier s'il s'agit d'un string
             # Si le joueur est un string
             if isinstance(joueur, str):
-                # créer un dictionnaire vide
-                nouveaujoueur = {}
                 # ajouter le nom au dictionnaire
-                nouveaujoueur['nom'] = joueur
+                self.joueurs[numero]['nom'] = joueur
                 # ajouter 10 murs à placer au joueur
-                nouveaujoueur['murs'] = 10
+                self.joueurs[numero]['murs'] = 10
                 # placer le joueur au bon endroit sur le jeu
-                if numero == 0:
-                    nouveaujoueur['pos'] = (5, 1)
-                else:
-                    nouveaujoueur['pos'] = (5, 9)
-                # créer le joueur dans l'objet de classe
-                self.joueurs[numero] = nouveaujoueur #TODO: remplacer nouveaujoueur par juste self.player
+                self.joueurs[numero]['pos'] = starting_position[numero]
             # Si le joueur fourni est un dictionnaire
             else:
                 # vérifier que les murs sont legit
@@ -159,6 +150,9 @@ class Quoridor:
                     raise QuoridorError("position du joueur invalide!")
                 # updater la valeur de joueur
                 self.joueurs[numero] = joueur
+        # Vérifier que le total des murs donne 20
+        if (len(self.murh) + len(self.murv) + self.joueurs[0]['murs'] + self.joueurs[1]['murs']) != 20:
+            raise QuoridorError("mauvaise quantité totale de murs!")
         
 
     def __str__(self):
@@ -187,9 +181,9 @@ class Quoridor:
                     board += ["{} |".format(((i + 1) // 2) + 1)]
                 else:
                     board += ["{}|".format(((i + 1) // 2) + 1)]
-                    board += [' ', '.']
-                    board += ([' ', ' ', ' ', '.'] * (board_positions - 1))
-                    board += [' ', '|\n']
+                board += [' ', '.']
+                board += ([' ', ' ', ' ', '.'] * (board_positions - 1))
+                board += [' ', '|\n']
             else:
                 board += ["  |"]
                 board += ([' '] * spacing_horizontal)
@@ -348,21 +342,61 @@ class Quoridor:
             position {tuple} -- le tuple (x, y) de la position du mur
             orientation {str} -- l'orientation du mur: 'horizontal' ou 'vertical'
         """
+        # définir les objectifs de chaque joueurs
+        objectif = ['B1', 'B2']
         # Vérifier que le joueur est valide
         if joueur != 1 and joueur != 2:
             raise QuoridorError("joueur invalide!")
         # Vérifier si le joueur ne peut plus placer de murs
         if self.joueurs[(joueur - 1)]['murs'] <= 0:
             raise QuoridorError("le joueur ne peut plus placer de murs!")
-        # créer un graphe des mouvements possible à jouer
-        graphe = construire_graphe(
-            [joueur['pos'] for joueur in self.joueurs],
-            self.murh,
-            self.murv
-        )
         # Si le mur est horizontal
         if orientation == 'horizontal':
             # vérifier si les positions sont dans les limites du jeu
-            if 1 > position[0] >8 or 2 > position[1] > 9:
+            if 1 > position[0] > 8 or 2 > position[1] > 9:
                 raise QuoridorError("position du mur invalide!")
             # vérifier si l'emplacement est déjà occupé
+            if (position[0], position[1]) in self.murh:
+                raise QuoridorError("Il y a déjà un mur!")
+            # Prendre en compte le décalage des murs
+            if ((position[0] + 1), position[1]) in self.murh:
+                raise QuoridorError("Il y a déjà un mur!")
+            # créer un graphe des mouvements possible à jouer avec le mur ajouté
+            graphe = construire_graphe(
+                [joueur['pos'] for joueur in self.joueurs],
+                (self.murh + position),
+                self.murv
+            )
+            # vérifier si placer ce mur enfermerais le joueur
+            # TODO: itérer pour vérifier pour chaque joueurs
+            if not(nx.has_path(graphe, (self.joueurs[(joueur - 1)]['pos']), objectif[(joueur - 1)])):
+                raise QuoridorError("ce coup enfermerait un joueur")
+            # placer le mur
+            self.murh += position
+            # retirer un mur des murs plaçables du joueurs
+            self.joueurs[(joueur - 1)]['murs'] -= 1
+        # Si c'est un mur vertical
+        else:
+            # vérifier si les positions sont dans les limites du jeu
+            if 2 > position[0] > 9 or 1 > position[1] > 8:
+                raise QuoridorError("position du mur invalide!")
+            # vérifier si l'emplacement est déjà occupé
+            if (position[0], position[1]) in self.murv:
+                raise QuoridorError("Il y a déjà un mur!")
+            # Prendre en compte le décalage des murs
+            if (position[0], (position[1] + 1)) in self.murv:
+                raise QuoridorError("Il y a déjà un mur!")
+            # créer un graphe des mouvements possible à jouer avec le mur ajouté
+            graphe = construire_graphe(
+                [joueur['pos'] for joueur in self.joueurs],
+                self.murh,
+                (self.murv + position)
+            )
+            # vérifier si placer ce mur enfermerais le joueur
+            # TODO: itérer pour vérifier pour chaque joueurs
+            if not(nx.has_path(graphe, (self.joueurs[(joueur - 1)]['pos']), objectif[(joueur - 1)])):
+                raise QuoridorError("ce coup enfermerait un joueur")
+            # placer le mur
+            self.murv += position
+            # retirer un mur des murs plaçables du joueurs
+            self.joueurs[(joueur - 1)]['murs'] -= 1

@@ -28,6 +28,7 @@ Contient les fonctions:
 '''
 import argparse
 import api
+import quoridor
 
 
 def line_namer(i):
@@ -149,6 +150,7 @@ def afficher_damier_ascii(etat):
         for i in range(3):
             board[(indice - (i * (spacing_horizontal + 2)))] = '|'
     # afficher le jeu sous forme d'une chaine de caractères
+    print(len(board))
     print(''.join(board))
 
 
@@ -275,6 +277,8 @@ def boucler():
         afficher_damier_ascii(newboard['état'])
 
 
+'''
+# fonction pour le projet 1
 if __name__ == "__main__":
     #  écouter si le joueur veut commencer une partie
     COM = analyser_commande()
@@ -286,4 +290,9 @@ if __name__ == "__main__":
         # débuter la partie et storer le id de la partie
         GAME_ID += debuter(COM)
         # boucler sur la logique de la partie
-        boucler()
+        boucler()'''
+
+
+# fonction pour tester le projet 2
+q = quoridor.Quoridor(["Sampai", "Senpai"])
+print(str(q))
