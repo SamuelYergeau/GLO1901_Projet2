@@ -30,5 +30,16 @@ To open the flow_diagram:
 1. go to: https://www.draw.io 
 2. click on "open existing project"
 3. select "flow_diagram.vsdx"
-* If you modify the flow diagram, please export as .vsdx (visio file) and the commit/push to the directory
+* If you modify the flow diagram, please export as .vsdx (visio file) and the commit/push to the directory\
+\
+VScode extensions to install:
+* autoDocstring
+* Bracket pair colosizer
+* GitLense
+* Indent-rainbow
+* Live Share
+* Live Share Audio
+* Live Share Chat
+* Live Share Extension Pack
+* Python (celle de Microsoft)
 
