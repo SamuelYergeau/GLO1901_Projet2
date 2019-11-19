@@ -296,7 +296,7 @@ if __name__ == "__main__":
 # fonction pour tester le projet 2
 finished_game = {
                     "joueurs": [
-                        {"nom": "idul", "murs": 7, "pos": [5, 9]},
+                        {"nom": "Sampai", "murs": 7, "pos": [5, 9]},
                         {"nom": "automate", "murs": 3, "pos": [5, 7]}
                     ],
                     "murs": {
@@ -305,8 +305,14 @@ finished_game = {
                     }
                 }
 debutee = quoridor.Quoridor(["Sampai", "Senpai"])
-terminee = quoridor.Quoridor(finished_game['joueurs'], finished_game['murs'])
-print('str debutée:', str(debutee)) #tester __init__ et __str__ --> OK
-print('str terminée:', str(terminee))
-print('etat_partie:', debutee.état_partie()) # tester état_partie --> OK
-print('eteminé_partie:', terminee.partie_terminée()) # tester partie_terminée -->
+#terminee = quoridor.Quoridor(finished_game['joueurs'], finished_game['murs'])
+#print('str debutée:', str(debutee)) #tester __init__ et __str__ --> OK
+#print('str terminée:', str(terminee))
+#print('etat_partie:', debutee.état_partie()) # tester état_partie --> OK
+#print('eteminé_partie:', terminee.partie_terminée()) # tester partie_terminée --> OK
+#debutee.déplacer_jeton(1, (5, 2))   # Tester déplacer_jeton --> OK
+#print('str jeton déplacé:', debutee)
+#debutee.placer_mur(1, (5, 5), 'horizontal') # Tester placer_mur --> OK
+#print('str jmur placé:', debutee)
+debutee.jouer_coup(1) # Tester jouer_coup --> does not move the piece!
+print(debutee)

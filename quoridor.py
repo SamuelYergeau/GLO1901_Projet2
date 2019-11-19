@@ -261,7 +261,7 @@ class Quoridor:
             self.murv
         )
         # vérifier si le mouvement est valide
-        if not(position in list(graphe.successors(self.joueurs[(joueur - 1)]))):
+        if not(position in list(graphe.successors(self.joueurs[(joueur - 1)]['pos']))):
             raise QuoridorError("mouvement invalide!")
         # Changer la position du joueur
         self.joueurs[(joueur - 1)]['pos'] = position
@@ -364,7 +364,7 @@ class Quoridor:
             # créer un graphe des mouvements possible à jouer avec le mur ajouté
             graphe = construire_graphe(
                 [joueur['pos'] for joueur in self.joueurs],
-                (self.murh + position),
+                (self.murh + [position]),
                 self.murv
             )
             # vérifier si placer ce mur enfermerais le joueur
@@ -372,7 +372,7 @@ class Quoridor:
             if not(nx.has_path(graphe, (self.joueurs[(joueur - 1)]['pos']), objectif[(joueur - 1)])):
                 raise QuoridorError("ce coup enfermerait un joueur")
             # placer le mur
-            self.murh += position
+            self.murh += [position]
             # retirer un mur des murs plaçables du joueurs
             self.joueurs[(joueur - 1)]['murs'] -= 1
         # Si c'est un mur vertical
@@ -390,13 +390,13 @@ class Quoridor:
             graphe = construire_graphe(
                 [joueur['pos'] for joueur in self.joueurs],
                 self.murh,
-                (self.murv + position)
+                (self.murv + [position])
             )
             # vérifier si placer ce mur enfermerais le joueur
             # TODO: itérer pour vérifier pour chaque joueurs
             if not(nx.has_path(graphe, (self.joueurs[(joueur - 1)]['pos']), objectif[(joueur - 1)])):
                 raise QuoridorError("ce coup enfermerait un joueur")
             # placer le mur
-            self.murv += position
+            self.murv += [position]
             # retirer un mur des murs plaçables du joueurs
             self.joueurs[(joueur - 1)]['murs'] -= 1
