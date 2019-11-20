@@ -131,8 +131,7 @@ class Quoridor:
             raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
         # itérer sur chaque joueur
         for numero, joueur in enumerate(joueurs):
-            # Vérifier s'il s'agit d'un string
-            # Si le joueur est un string
+            # Vérifier s'il s'agit d'un string ou d'un dictionnaire
             if isinstance(joueur, str):
                 # ajouter le nom au dictionnaire
                 self.joueurs[numero]['nom'] = joueur
@@ -140,7 +139,6 @@ class Quoridor:
                 self.joueurs[numero]['murs'] = 10
                 # placer le joueur au bon endroit sur le jeu
                 self.joueurs[numero]['pos'] = starting_position[numero]
-            # Si le joueur fourni est un dictionnaire
             else:
                 # vérifier que les murs sont legit
                 if  0 < joueur['murs'] > 10:
