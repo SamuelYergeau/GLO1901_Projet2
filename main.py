@@ -304,9 +304,22 @@ finished_game = {
                         "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
                     }
                 }
+def tester_full_ai_game():
+    """
+    Test Si le AI peut faire une partie complète
+    Résultat: FONCTIONNEL (avec la fonction stupide qui fais juste des déplacements)
+    """
+    q = quoridor.Quoridor(["bot1", "bot2"])
+    print(q)
+    while(True):
+        for i in range(1,3):
+            q.jouer_coup(i)
+            print(q)
+            if q.partie_terminée():
+                return "bot{} à gagné!".format(str(i))
 debutee = quoridor.Quoridor(["Sampai", "Senpai"])
 #terminee = quoridor.Quoridor(finished_game['joueurs'], finished_game['murs'])
-print('str debutée:', debutee) #tester __init__ et __str__ --> OK
+#print('str debutée:', debutee) #tester __init__ et __str__ --> OK
 #print('str terminée:', str(terminee))
 #print('etat_partie:', debutee.état_partie()) # tester état_partie --> OK
 #print('eteminé_partie:', terminee.partie_terminée()) # tester partie_terminée --> OK
@@ -315,3 +328,4 @@ print('str debutée:', debutee) #tester __init__ et __str__ --> OK
 #debutee.placer_mur(1, (5, 5), 'horizontal') # Tester placer_mur --> OK
 #print('str jmur placé:', debutee)
 #debutee.jouer_coup(1) # Tester jouer_coup --> OK
+#print(tester_full_ai_game()) # Tester si le AI peut jouer une partie complète contre lui-même --> OK

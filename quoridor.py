@@ -250,7 +250,7 @@ class Quoridor:
         if joueur != 1 and joueur != 2:
             raise QuoridorError("joueur invalide!")
         # Vérifier que la position du joueur est valide
-        if 1 < position[0] > 9 or 1 < position[1] > 9:
+        if not(1 <= position[0] <= 9 or 1 <= position[1] <= 9):
             raise QuoridorError("position invalide!")
         # créer un graphe des mouvements possible à jouer
         graphe = construire_graphe(
@@ -300,21 +300,24 @@ class Quoridor:
             joueur {int} -- un entier spécifiant le numéro du joueur (1 ou 2)
         NOTE: version temporaire et stupide! à optimiser!
         """
+        # objectifs
+        objectifs = ['B1', 'B2']
         # Vérifier que le joueur est valide
         if joueur != 1 and joueur != 2:
             raise QuoridorError("joueur invalide!")
+        # Vérifier si la partie est déjà terminée
+        if self.partie_terminée():
+            raise QuoridorError("La partie est déjà terminée!")
         # créer un graphe des mouvements possible à jouer
         graphe = construire_graphe(
             [joueur['pos'] for joueur in self.joueurs],
             self.murh,
             self.murv
         )
-        # vérifier si la partie est déjà terminée
-        # TODO: compléter
-        coup_a_jouer = nx.shortest_path(graphe, self.joueurs[(joueur - 1)]['pos'], 'B1')[1]
-        print(coup_a_jouer)
+        coup_a_jouer = nx.shortest_path(graphe, self.joueurs[(joueur - 1)]['pos'], objectifs[(joueur - 1)])[1]
         # jouer le coup
-        # TODO: compléter
+        # TODO: compléter pour faire plus que juste bouger le jeton
+        self.déplacer_jeton(joueur, coup_a_jouer)
 
 
     def partie_terminée(self):
