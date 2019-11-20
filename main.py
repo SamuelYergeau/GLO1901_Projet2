@@ -306,7 +306,7 @@ finished_game = {
                 }
 debutee = quoridor.Quoridor(["Sampai", "Senpai"])
 #terminee = quoridor.Quoridor(finished_game['joueurs'], finished_game['murs'])
-#print('str debutée:', str(debutee)) #tester __init__ et __str__ --> OK
+print('str debutée:', debutee) #tester __init__ et __str__ --> OK
 #print('str terminée:', str(terminee))
 #print('etat_partie:', debutee.état_partie()) # tester état_partie --> OK
 #print('eteminé_partie:', terminee.partie_terminée()) # tester partie_terminée --> OK

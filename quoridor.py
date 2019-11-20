@@ -177,10 +177,8 @@ class Quoridor:
         for i in reversed(range((board_positions * 2) - 1)):
             if (i % 2) == 0:
                 # check if more than 10 positions for better formatting
-                if (((i + 1) // 2) + 1) < 10:
-                    board += ["{} |".format(((i + 1) // 2) + 1)]
-                else:
-                    board += ["{}|".format(((i + 1) // 2) + 1)]
+                board += ["{}{}|".format((((i + 1) // 2) + 1),
+                                         (' ' * (1 - ((((i + 1) // 2) + 1) // 10))))]
                 board += [' ', '.']
                 board += ([' ', ' ', ' ', '.'] * (board_positions - 1))
                 board += [' ', '|\n']
@@ -188,12 +186,12 @@ class Quoridor:
                 board += ["  |"]
                 board += ([' '] * spacing_horizontal)
                 board += ['|\n']
-        # bottom board line
+        # bottom lines
         board += "--|" + ('-' * spacing_horizontal) + '\n'
-        # bottom number line
         board += (' ' * 2) + '| '
         for i in range(1, board_positions):
-            board += str(i) + (' ' * 3)
+            board += str(i) + (' ')
+            board += (' ' * (2 - (i // 10)))
         board += "{}\n".format(board_positions)
         # insertion des joueurs dans board
         for num, joueur in enumerate(self.joueurs):
