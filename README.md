@@ -45,5 +45,5 @@ Everything should be good and working with that
 
 ## Packages to install:
 * pip install requests
-* pip install networks
+* pip install networkx
 * pip install -U matplotlib==3.2.0rc1
