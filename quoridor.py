@@ -103,6 +103,7 @@ class Quoridor:
             -- 'horzontaux': [list of tuples]
                 Une liste de tuples (x, y) représentant la position des différents
                 murs horizontaux dans la partie
+        TODO: faire une copie profonde au lieu d'unne copie normale (voir fil 1764)
         """
         # définir les attribut de classes que nous allons utiliser
         self.joueurs = [{'nom':'', 'murs': 0, 'pos':(0,0)},
