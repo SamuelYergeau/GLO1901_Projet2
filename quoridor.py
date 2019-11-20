@@ -408,11 +408,9 @@ class TestStringMethods(unittest.TestCase):
     def Test__str__(self):
     def Testdéplacer_jeton(self, joueur, position):
         # Vérifier que le joueur est valide
-        if joueur != 1 and joueur != 2:
-            self.assertTrue()
-        # Vérifier que la position du joueur est valide
-        if not(1 <= position[0] <= 9 or 1 <= position[1] <= 9):
-            self.assertTrue()
+        self.assertTrue(joueur == 1 or joueur == 2) 
+        self.assertFalse(joueur =! 1 or joueur == 2)
+        
     def Testétat_partie(self):
     def Testjouer_coup(self, joueur):
     def Testpartie_terminée(self):
