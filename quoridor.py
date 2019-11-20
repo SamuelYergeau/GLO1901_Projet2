@@ -406,4 +406,10 @@ class Quoridor:
 
 
 class TestStringMethods(unittest.TestCase):
-    def __init__(self, joueurs, murs=None):
+    def Test__init__(self, joueurs, murs=None):
+    def Test__str__(self):
+    def Testdéplacer_jeton(self, joueur, position):
+    def Testétat_partie(self):
+    def Testjouer_coup(self, joueur):
+    def Testpartie_terminée(self):
+    def Testplacer_mur(self, joueur: int, position: tuple, orientation: str):
