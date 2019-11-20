@@ -413,9 +413,6 @@ class TestStringMethods(unittest.TestCase):
         # Vérifier que la position du joueur est valide
         if not(1 <= position[0] <= 9 or 1 <= position[1] <= 9):
             self.assertTrue()
-        # vérifier si le mouvement est valide
-        if not(position in list(graphe.successors(self.joueurs[(joueur - 1)]['pos']))):
-            self.assertTrue()
     def Testétat_partie(self):
     def Testjouer_coup(self, joueur):
     def Testpartie_terminée(self):
