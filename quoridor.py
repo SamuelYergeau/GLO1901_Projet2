@@ -6,6 +6,7 @@ contient les classes:
     - QuoridorError(Exception)
 """
 import networkx as nx
+import unittest
 
 
 def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
@@ -401,3 +402,17 @@ class Quoridor:
             self.murv += [position]
             # retirer un mur des murs plaçables du joueurs
             self.joueurs[(joueur - 1)]['murs'] -= 1
+
+
+class TestStringMethods(unittest.TestCase):
+    def Test__init__(self, joueurs, murs=None):
+    def Test__str__(self):
+    def Testdéplacer_jeton(self, joueur, position):
+        # Vérifier que le joueur est valide
+        self.assertTrue(joueur == 1 or joueur == 2) 
+        self.assertFalse(joueur =! 1 or joueur == 2)
+        
+    def Testétat_partie(self):
+    def Testjouer_coup(self, joueur):
+    def Testpartie_terminée(self):
+    def Testplacer_mur(self, joueur: int, position: tuple, orientation: str):
