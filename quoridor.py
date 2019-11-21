@@ -170,8 +170,9 @@ class Quoridor:
         game_pos_x = range(1, (board_positions * 4), 4)
         game_pos_y = range(((board_positions - 1) * 2), -1, -2)
         # Création du tableau de jeu
-        # place holder où ajouter tous les joueurs (pour permettre plus de 2 joueurs)
-        légende = "légende: "
+        # en-tête
+        légende = "légende: 1={} 2={}\n".format(self.joueurs[0]['nom'], self.joueurs[1]['nom'])
+        légende += (' ' * 3) + ('-' * spacing_horizontal) + '\n'
         board = [légende]
         # game board
         for i in reversed(range((board_positions * 2) - 1)):
@@ -195,8 +196,6 @@ class Quoridor:
         board += "{}\n".format(board_positions)
         # insertion des joueurs dans board
         for num, joueur in enumerate(self.joueurs):
-            # ajout du joueur à la légende du tableau
-            légende += "{}={} ".format((num + 1), joueur['nom'])
             # obtention de la position en [x, y] du joueur
             position = joueur["pos"]
             # vérification que la position est dans les contraintes
@@ -210,8 +209,6 @@ class Quoridor:
             indice += decallage
             # Insérer le personnage dans le tableau de jeu
             board[indice] = str(num + 1)
-        # complétion de la légende du tableau
-        board[0] = légende + '\n' + (' ' * 3) + ('-' * spacing_horizontal) + '\n'
         # insertion des murs horizontaux dans board
         for murh in self.murh:
             # vérification que la position est dans les contraintes
@@ -404,15 +401,91 @@ class Quoridor:
             self.joueurs[(joueur - 1)]['murs'] -= 1
 
 
-class TestStringMethods(unittest.TestCase):
-    def Test__init__(self, joueurs, murs=None):
-    def Test__str__(self):
-    def Testdéplacer_jeton(self, joueur, position):
+#NOTE: J'ai changé le nom de la classe pour que celle-ci soit plus signoficative
+#NOTE: les noms des fonctions doivent obligatoirement commencer par le mot "test" avec un t MINUSCULE
+#NOTE: les fonctions de tests n'ont pas d'arguments autre que self car elles doivent contenir toutes les états de tests possible à l'intérieur d'elles
+class TestQuoridor(unittest.TestCase):
+    
+    def test__init__(self):
+        """test la fonction __init
+        """
+        # Dresser des tableaux connus pour des constructions connues
+        nouveau_jeu = ("légende: 1=foo 2=bar\n" +
+                        "   -----------------------------------\n" +
+                        "9 | .   .   .   .   2   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "8 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "7 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "6 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "5 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "4 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "3 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "2 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "1 | .   .   .   .   1   .   .   .   . |\n" +
+                        "--|-----------------------------------\n" +
+                        "  | 1   2   3   4   5   6   7   8   9\n")
+        partie_existante_tableau = ("légende: 1=foo 2=bar\n" +
+                        "   -----------------------------------\n" +
+                        "9 | .   .   .   .   .   .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "8 | .   .   .   .   .   . | .   .   . |\n" +
+                        "  |        ------- -------|-------    |\n" +
+                        "7 | .   .   .   .   2   . | .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "6 | . | .   .   .   1   . | .   .   . |\n" +
+                        "  |   |-------            |           |\n" +
+                        "5 | . | .   . | .   .   . | .   .   . |\n" +
+                        "  |           |                       |\n" +
+                        "4 | .   .   . | .   .   .   .   .   . |\n" +
+                        "  |            -------                |\n" +
+                        "3 | .   .   .   .   . | .   .   .   . |\n" +
+                        "  |                   |               |\n" +
+                        "2 | .   .   .   .   . | .   .   .   . |\n" +
+                        "  |                                   |\n" +
+                        "1 | .   .   .   .   .   .   .   .   . |\n" +
+                        "--|-----------------------------------\n" +
+                        "  | 1   2   3   4   5   6   7   8   9\n")
+        partie_existante_etat = {
+                                    "joueurs": [
+                                        {"nom": "foo", "murs": 7, "pos": [5, 6]},
+                                        {"nom": "bar", "murs": 3, "pos": [5, 7]}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+                                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+                                    }
+                                }
+        # Test de création d'une partie nouvelle
+        self.assertEqual(str(Quoridor(["foo", "bar"])), nouveau_jeu)
+        # Test de création d'une partie déjà existante
+        self.assertEqual(str(Quoridor(partie_existante_etat['joueurs'],
+                                      partie_existante_etat['murs'])),
+                                      partie_existante_tableau)
+        # TODO: ajouter des tests qui doivent soulever des erreurs et vérifier qu'ils soulèvent bel et bien ces erreurs
+        # NOTE: Il faut tester tous les cas de figures qu'on peut imaginer. Toutes les exceptions qu'on s'attends à voir être levés doivent être testées
+"""
+    def test__str__(self):
+
+    def test_déplacer_jeton(self):
         # Vérifier que le joueur est valide
         self.assertTrue(joueur == 1 or joueur == 2) 
         self.assertFalse(joueur =! 1 or joueur == 2)
         
-    def Testétat_partie(self):
-    def Testjouer_coup(self, joueur):
-    def Testpartie_terminée(self):
-    def Testplacer_mur(self, joueur: int, position: tuple, orientation: str):
+    def test_état_partie(self):
+
+    def test_jouer_coup(self):
+
+    def test_partie_terminée(self):
+
+    def test_placer_mur(self):
+"""
+# Lancer la batterie de tests unitaires l'orsque ce module est lancé en tant que main (pas importé)
+if __name__ == '__main__':
+    unittest.main(argv=[''], verbosity=2, exit=False)

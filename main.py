@@ -294,16 +294,6 @@ if __name__ == "__main__":
 
 
 # fonction pour tester le projet 2
-finished_game = {
-                    "joueurs": [
-                        {"nom": "Sampai", "murs": 7, "pos": [5, 9]},
-                        {"nom": "automate", "murs": 3, "pos": [5, 7]}
-                    ],
-                    "murs": {
-                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
-                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
-                    }
-                }
 def tester_full_ai_game():
     """
     Test Si le AI peut faire une partie complète
