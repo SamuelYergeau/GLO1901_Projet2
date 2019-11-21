@@ -470,13 +470,25 @@ class TestQuoridor(unittest.TestCase):
                                       partie_existante_tableau)
         # TODO: ajouter des tests qui doivent soulever des erreurs et vérifier qu'ils soulèvent bel et bien ces erreurs
         # NOTE: Il faut tester tous les cas de figures qu'on peut imaginer. Toutes les exceptions qu'on s'attends à voir être levés doivent être testées
-"""
-    def test__str__(self):
 
+    def test__str__(self):
+        x = 1
+        
     def test_déplacer_jeton(self):
-        # Vérifier que le joueur est valide
-        self.assertTrue(joueur == 1 or joueur == 2) 
-        self.assertFalse(joueur =! 1 or joueur == 2)
+"""
+        etatdepartie = {
+                        "joueurs": [
+                            {"nom": "1", "murs": 0, "pos": [5, 2]},
+                         ],
+                        "murs": {
+                             "horizontaux": [],
+                            "verticaux": []
+                         }
+                     }
+
+        self.assertEqual(Quoridor(déplacer_jeton(1, (5,2))), etatdepartie)
+        self.asserEqual(Quoridor(déplacer_jeton(5, (5,2))), raise QuoridorError("joueur invalide!"))
+        self.asserEqual(Quoridor(déplacer_jeton(1, (10,10))), raise QuoridorError("position invalide!")
         
     def test_état_partie(self):
 
