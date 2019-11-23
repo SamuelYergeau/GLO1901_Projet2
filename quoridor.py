@@ -291,7 +291,7 @@ class Quoridor:
         """
         jouer_coup        
         Pour le joueur spécifié, jouer automatiquement son meilleur
-        coup pour l'état actuel de la partie. Ce coup est soir le déplacement de son jeton,
+        coup pour l'état actuel de la partie. Ce coup est soit le déplacement de son jeton,
         soit le placement d'un mur horizontal ou vertical.
         Arguments:
             joueur {int} -- un entier spécifiant le numéro du joueur (1 ou 2)
@@ -471,11 +471,12 @@ class TestQuoridor(unittest.TestCase):
         # TODO: ajouter des tests qui doivent soulever des erreurs et vérifier qu'ils soulèvent bel et bien ces erreurs
         # NOTE: Il faut tester tous les cas de figures qu'on peut imaginer. Toutes les exceptions qu'on s'attends à voir être levés doivent être testées
 
-    def test__str__(self):
-        x = 1
-        
-    def test_déplacer_jeton(self):
+
 """
+    def test__str__(self):
+    
+    def test_déplacer_jeton(self):
+
         etatdepartie = {
                         "joueurs": [
                             {"nom": "1", "murs": 0, "pos": [5, 2]},
@@ -486,18 +487,30 @@ class TestQuoridor(unittest.TestCase):
                          }
                      }
 
-        self.assertEqual(Quoridor(déplacer_jeton(1, (5,2))), etatdepartie)
-        self.asserEqual(Quoridor(déplacer_jeton(5, (5,2))), raise QuoridorError("joueur invalide!"))
-        self.asserEqual(Quoridor(déplacer_jeton(1, (10,10))), raise QuoridorError("position invalide!")
+       self.assertEqual(Quoridor(déplacer_jeton(1, (5,2))), etatdepartie)
+       self.asserEqual(Quoridor(déplacer_jeton(5, (5,2))), raise QuoridorError("joueur invalide!"))
+       self.asserEqual(Quoridor(déplacer_jeton(1, (10,10))), raise QuoridorError("position invalide!")
         
     def test_état_partie(self):
-
+        
     def test_jouer_coup(self):
 
     def test_partie_terminée(self):
+        self.assertEqual(Quoridor(déplacer_jeton(1, (9,1)), 1)
 
     def test_placer_mur(self):
+        etatdepartie2 = {
+                        "joueurs": [
+                            {"nom": "1", "murs": 1, "pos": []},
+                         ],
+                       "murs": {
+                             "horizontaux": [],
+                            "verticaux": [5, 2]
+                         }
+                     }
+
+        self.assertEqual(Quoridor(placer_mur(1, (5,2), "vertical")), etatdepartie2)
 """
-# Lancer la batterie de tests unitaires l'orsque ce module est lancé en tant que main (pas importé)
+#Lancer la batterie de tests unitaires l'orsque ce module est lancé en tant que main (pas importé)
 if __name__ == '__main__':
     unittest.main(argv=[''], verbosity=2, exit=False)
