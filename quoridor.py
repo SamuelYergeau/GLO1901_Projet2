@@ -7,6 +7,8 @@ contient les classes:
 """
 import networkx as nx
 import unittest
+import matplotlib.pyplot as plt
+import copy
 
 
 def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
@@ -105,13 +107,18 @@ class Quoridor:
                 Une liste de tuples (x, y) représentant la position des différents
                 murs horizontaux dans la partie
         TODO: faire une copie profonde au lieu d'unne copie normale (voir fil 1764)
-        """
+        *** copy.deepcopy(x[,memo]) ou memo est le dictionnaire des objets déjà copié"""
         # définir les attribut de classes que nous allons utiliser
         self.joueurs = [{'nom':'', 'murs': 0, 'pos':(0,0)},
                         {'nom':'', 'murs': 0, 'pos':(0,0)}]
         self.murh = []
         self.murv = []
         starting_position = [(5, 1), (5, 9)]
+        #faire un copie profonde de ce qui a besoin d'être copié
+        self.joueurs = copy.deepcopy(self.joueurs)
+        self.murh = copy.deepcopy(self.murh)
+        self.murv = copy.deepcopy(self.murv)
+        starting_position = copy.deepcopy(starting_position)
         # vérifier si un dictionnaire de murs est présent
         if murs:
             # vérifier si murs est un tuple
@@ -264,7 +271,7 @@ class Quoridor:
 
     def état_partie(self):
         """
-         état_partie        
+        état_partie        
         Produit l'état actuel du jeu sous la forme d'un dictionnaire
         input: None
         Return:
@@ -284,7 +291,7 @@ class Quoridor:
                 "murs":{
                         "horizontaux": self.murh,
                         "verticaux": self.murv
-                       }}
+                        }}
 
 
     def jouer_coup(self, joueur):
@@ -319,7 +326,7 @@ class Quoridor:
 
     def partie_terminée(self):
         """
-         partie_terminée        
+        partie_terminée        
         [extended_summary]
         """
         # definir les conditions de victoire
@@ -401,7 +408,7 @@ class Quoridor:
             self.joueurs[(joueur - 1)]['murs'] -= 1
 
 
-#NOTE: J'ai changé le nom de la classe pour que celle-ci soit plus signoficative
+#NOTE: J'ai changé le nom de la classe pour que celle-ci soit plus significative
 #NOTE: les noms des fonctions doivent obligatoirement commencer par le mot "test" avec un t MINUSCULE
 #NOTE: les fonctions de tests n'ont pas d'arguments autre que self car elles doivent contenir toutes les états de tests possible à l'intérieur d'elles
 class TestQuoridor(unittest.TestCase):
