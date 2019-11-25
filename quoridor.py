@@ -498,7 +498,7 @@ class TestQuoridor(unittest.TestCase):
     
     #def test_état_partie(self):
         #self.assertEqual(Quoridor(partie_existante_etat)),partie_existante_tableau)
- """  
+ 
     def test_jouer_coup(self):
         
         etatdepartie2 = {
@@ -514,7 +514,7 @@ class TestQuoridor(unittest.TestCase):
         self.assertRaisesRegex(QuoridorError, "joueur invalide!", Quoridor(jouer_coup(5)))
         self.assertRaisesRegex(QuoridorError, " La partie est déjà terminée!", jeu2.état_partie())        
 
- 
+ """ 
     def test_partie_terminée(self):
         self.assertEqual(Quoridor(déplacer_jeton(1, (9,1)), 1)
 
