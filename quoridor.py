@@ -8,6 +8,8 @@ contient les classes:
 import networkx as nx
 import unittest
 import matplotlib.pyplot as plt
+import copy
+
 
 def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
     """
@@ -105,13 +107,18 @@ class Quoridor:
                 Une liste de tuples (x, y) représentant la position des différents
                 murs horizontaux dans la partie
         TODO: faire une copie profonde au lieu d'unne copie normale (voir fil 1764)
-        """
+        *** copy.deepcopy(x[,memo]) ou memo est le dictionnaire des objets déjà copié"""
         # définir les attribut de classes que nous allons utiliser
         self.joueurs = [{'nom':'', 'murs': 0, 'pos':(0,0)},
                         {'nom':'', 'murs': 0, 'pos':(0,0)}]
         self.murh = []
         self.murv = []
         starting_position = [(5, 1), (5, 9)]
+        #faire un copie profonde de ce qui a besoin d'être copié
+        self.joueurs = copy.deepcopy(self.joueurs)
+        self.murh = copy.deepcopy(self.murh)
+        self.murv = copy.deepcopy(self.murv)
+        starting_position = copy.deepcopy(starting_position)
         # vérifier si un dictionnaire de murs est présent
         if murs:
             # vérifier si murs est un tuple
