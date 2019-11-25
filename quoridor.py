@@ -492,6 +492,7 @@ class TestQuoridor(unittest.TestCase):
        self.asserEqual(Quoridor(déplacer_jeton(1, (10,10))), raise QuoridorError("position invalide!")
         
     def test_état_partie(self):
+        self.assertEqual(Quoridor(partie_existante_etat)),partie_existante_tableau)
         
     def test_jouer_coup(self):
 
