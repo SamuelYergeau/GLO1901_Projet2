@@ -7,7 +7,7 @@ contient les classes:
 """
 import networkx as nx
 import unittest
-
+import matplotlib.pyplot as plt
 
 def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
     """
@@ -74,13 +74,6 @@ def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
         graphe.add_edge((x, 1), 'B2')
 
     return graphe
-
-#pour créer le graphe
-graph = construire graphe(
-    [jouer['pos'] for joueur in état['joueurs']],
-    état['murs']['horizontaux'],
-    état['murs']['verticaux']
-)
 
 
 class QuoridorError(Exception):
