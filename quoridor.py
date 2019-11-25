@@ -478,8 +478,6 @@ class TestQuoridor(unittest.TestCase):
         # TODO: ajouter des tests qui doivent soulever des erreurs et vérifier qu'ils soulèvent bel et bien ces erreurs
         # NOTE: Il faut tester tous les cas de figures qu'on peut imaginer. Toutes les exceptions qu'on s'attends à voir être levés doivent être testées
 
-
-
     #def test__str__(self):
     
     def test_déplacer_jeton(self):
@@ -497,17 +495,31 @@ class TestQuoridor(unittest.TestCase):
         self.assertRaisesRegex(QuoridorError, "joueur invalide!", jeu.déplacer_jeton, 5, (5, 2))
         self.assertRaisesRegex(QuoridorError, "position invalide!", jeu.déplacer_jeton, 1, (10, 10))
         #NOTE: n'oubliez pas de tester TOUTEs les situations possibles. Il faut bien entendu tester celles où la fonction fonctionne bien.
-    """     
-    def test_état_partie(self):
-        self.assertEqual(Quoridor(partie_existante_etat)),partie_existante_tableau)
-        
+    
+    #def test_état_partie(self):
+        #self.assertEqual(Quoridor(partie_existante_etat)),partie_existante_tableau)
+ """  
     def test_jouer_coup(self):
+        
+        etatdepartie2 = {
+                        "joueurs": [
+                            {"nom": "1", "murs": 0, "pos": [9, 1]},
+                         ],
+                        "murs": {
+                             "horizontaux": [],
+                            "verticaux": []
+                         }
+                     }
+        jeu2 = Quoridor(etatdepartie2)
+        self.assertRaisesRegex(QuoridorError, "joueur invalide!", Quoridor(jouer_coup(5)))
+        self.assertRaisesRegex(QuoridorError, " La partie est déjà terminée!", jeu2.état_partie())        
 
+ 
     def test_partie_terminée(self):
         self.assertEqual(Quoridor(déplacer_jeton(1, (9,1)), 1)
 
     def test_placer_mur(self):
-        etatdepartie2 = {
+        etatdepartie3 = {
                         "joueurs": [
                             {"nom": "1", "murs": 1, "pos": []},
                          ],
@@ -517,7 +529,7 @@ class TestQuoridor(unittest.TestCase):
                          }
                      }
 
-        self.assertEqual(Quoridor(placer_mur(1, (5,2), "vertical")), etatdepartie2)
+        self.assertEqual(Quoridor(placer_mur(1, (5,2), "vertical")), etatdepartie3)
 """
 #Lancer la batterie de tests unitaires l'orsque ce module est lancé en tant que main (pas importé)
 if __name__ == '__main__':
