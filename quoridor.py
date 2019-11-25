@@ -82,7 +82,7 @@ class QuoridorError(Exception):
     Arguments:
         Exception {[type]} -- [description]
     """
-    print("quoridorerror")
+    pass
 
 
 class Quoridor:
@@ -472,8 +472,8 @@ class TestQuoridor(unittest.TestCase):
         # NOTE: Il faut tester tous les cas de figures qu'on peut imaginer. Toutes les exceptions qu'on s'attends à voir être levés doivent être testées
 
 
-"""
-    def test__str__(self):
+
+    #def test__str__(self):
     
     def test_déplacer_jeton(self):
 
@@ -486,11 +486,11 @@ class TestQuoridor(unittest.TestCase):
                             "verticaux": []
                          }
                      }
-
-       self.assertEqual(Quoridor(déplacer_jeton(1, (5,2))), etatdepartie)
-       self.asserEqual(Quoridor(déplacer_jeton(5, (5,2))), raise QuoridorError("joueur invalide!"))
-       self.asserEqual(Quoridor(déplacer_jeton(1, (10,10))), raise QuoridorError("position invalide!")
-        
+        jeu = Quoridor(etatdepartie)
+        self.assertRaisesRegex(QuoridorError, "joueur invalide!", jeu.déplacer_jeton, 5, (5, 2))
+        self.assertRaisesRegex(QuoridorError, "position invalide!", jeu.déplacer_jeton, 1, (10, 10))
+        #NOTE: n'oubliez pas de tester TOUTEs les situations possibles. Il faut bien entendu tester celles où la fonction fonctionne bien.
+    """     
     def test_état_partie(self):
         self.assertEqual(Quoridor(partie_existante_etat)),partie_existante_tableau)
         
