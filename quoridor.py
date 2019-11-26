@@ -1,3 +1,31 @@
+#1)Fonctionnement de base de la classe Quoridor (30%)
+
+#1.1)On peut construire une instance de la classe en spécifiant une liste de deux noms de joueurs. 
+#Cette instance est construite avec l'état initial d'une nouvelle partie.
+
+#1.2)On peut afficher en art ascii une représentation de l'état actuel de la partie en passant l'instance directement à la fonction print, 
+#tel que décrit par l'énoncé.
+
+#1.3)On peut récupérer le dictionnaire de l'état actuel de la partie grâce à la méthode état_parti, tel que décrit par l'énoncé.
+
+#1.4)Avec des numéros de joueur et des positions valides, on peut déplacer les jetons des joueurs et placer des murs grâce aux méthodes
+#  déplacer_jeton et placer_mur, tout en maintenant l'état de la partie à jour et conforme à l'énoncé.
+
+#1.5)Lorsqu'un joueur gagne la partie, on peut le savoir grâce à la méthode partie_terminée, tel que décrit par l'énoncé.
+
+#2)Initialisation d'une partie en cours (10%)
+#2.1)On peut construire une instance de la classe Quoridor à partir de joueurs et de murs déjà positionnés à des emplacements valides
+
+
+#3)Détection des erreurs (10%)
+#3.1)Une classe QuoridorError est bien définie dans le module quoridor
+#Les méthodes de la classe Quoridor soulèvent bien une instance de QuoridorError, 
+#pour toutes les combinaisons invalides de leurs arguments.
+
+
+#4) Choix automatique du prochain coup (10%)
+#4.1)La méthode jouer_coup choisit toujours un coup valide pour le joueur spécifié, peu importe l'état actuel de la partie.
+
 """ Quoridor.py
 Module qui enferme les classes d'encapsulation
 de la structure du jeu
