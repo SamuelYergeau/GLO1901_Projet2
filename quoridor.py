@@ -143,31 +143,29 @@ class Quoridor:
         self.murv = []
         starting_position = [(5, 1), (5, 9)]
         #faire un copie profonde de ce qui a besoin d'être copié
-        self.joueurs = copy.deepcopy(self.joueurs)
-        self.murh = copy.deepcopy(self.murh)
-        self.murv = copy.deepcopy(self.murv)
-        starting_position = copy.deepcopy(starting_position)
+        cjoueurs = copy.deepcopy(joueurs)
+        cmurs = copy.deepcopy(murs)
         # vérifier si un dictionnaire de murs est présent
         if murs:
             # vérifier si murs est un tuple
-            if not(isinstance(murs, dict)):
+            if not(isinstance(cmurs, dict)):
                 raise QuoridorError("murs n'est pas un dictionnaire!")
             # itérer sur chaque mur horizontal
-            for mur in murs['horizontaux']:
+            for mur in cmurs['horizontaux']:
                 # Vérifier si la position du mur est valide
                 if 1 < mur[0] > 8 and 2 < mur[1] > 9:
                     raise QuoridorError("position du mur non-valide!")
                 self.murh += [mur]
             # itérer sur chaque mur vertical
-            for mur in murs['verticaux']:
+            for mur in cmurs['verticaux']:
                 if 2 < mur[0] > 9 and 1 < mur[1] > 8:
                     raise QuoridorError("position du mur non-valide!")
                 self.murv += [mur]
         # vérifier que joueurs est itérable et de longueur 2
-        if len(joueurs) != 2:
+        if len(cjoueurs) != 2:
             raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
         # itérer sur chaque joueur
-        for numero, joueur in enumerate(joueurs):
+        for numero, joueur in enumerate(cjoueurs):
             # Vérifier s'il s'agit d'un string ou d'un dictionnaire
             if isinstance(joueur, str):
                 # ajouter le nom au dictionnaire
@@ -317,7 +315,7 @@ class Quoridor:
                 }
             }
         """
-        return {"joueurs": [self.joueurs],
+        return {"joueurs": self.joueurs,
                 "murs":{
                         "horizontaux": self.murh,
                         "verticaux": self.murv
@@ -350,7 +348,7 @@ class Quoridor:
         if joueur != 1 and joueur != 2:
             raise QuoridorError("joueur invalide!")
         # Vérifier si la partie est déjà terminée
-        if self.partie_terminée():
+        if self.partie_terminée() != False:
             raise QuoridorError("La partie est déjà terminée!")
         # créer un graphe des mouvements possible à jouer
         graphe = construire_graphe(
@@ -375,9 +373,10 @@ class Quoridor:
         # itérer sur chaque joueurs
         for numero, joueur in enumerate(self.joueurs):
             # Vérifier si le joueur rempli les conditions de victoires
-            if joueur['pos'][1] == condition_de_victoire[numero]:
+            if joueur['pos'][1] == condition_de_victoire[(numero)]:
                 # Retourner le nom du joueur gagnant
                 return joueur['nom']
+        return False
 
 
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
@@ -544,40 +543,84 @@ class TestQuoridor(unittest.TestCase):
         self.assertRaisesRegex(QuoridorError, "position invalide!", jeu.déplacer_jeton, 1, (10, 10))
         #NOTE: n'oubliez pas de tester TOUTEs les situations possibles. Il faut bien entendu tester celles où la fonction fonctionne bien.
     
-    #def test_état_partie(self):
-        #self.assertEqual(Quoridor(partie_existante_etat)),partie_existante_tableau)
+    def test_état_partie(self):
+        nouvelle_partie_etat = {
+                                    "joueurs": [
+                                        {"nom": "joueur1", "murs": 10, "pos": (5, 1)},
+                                        {"nom": "joueur2", "murs": 10, "pos": (5, 9)}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [],
+                                        "verticaux": []
+                                    }
+                                }
+        # Tester si la fonction retourne la bonne affichage
+        nouvellepartie = Quoridor(["joueur1", "joueur2"])
+        self.assertEqual(nouvellepartie.état_partie(), nouvelle_partie_etat)
  
     def test_jouer_coup(self):
         
-        etatdepartie2 = {
-                        "joueurs": [
-                            {"nom": "1", "murs": 0, "pos": [9, 1]},
-                         ],
-                        "murs": {
-                             "horizontaux": [],
-                            "verticaux": []
-                         }
-                     }
-        jeu2 = Quoridor(etatdepartie2)
-        self.assertRaisesRegex(QuoridorError, "joueur invalide!", Quoridor(jouer_coup(5)))
-        self.assertRaisesRegex(QuoridorError, " La partie est déjà terminée!", jeu2.état_partie())        
+        partie_terminee_etat = {
+                                    "joueurs": [
+                                        {"nom": "joueur1", "murs": 7, "pos": [5, 9]},
+                                        {"nom": "joueur2", "murs": 3, "pos": [6, 9]}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+                                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+                                    }
+                                }
+        # Tester l'erreur soulevée lorsqu'on donne un joueur invalide
+        jeu_nouveau = Quoridor(["joueur1", "joueur2"])
+        self.assertRaisesRegex(QuoridorError, "joueur invalide!", jeu_nouveau.jouer_coup, 5)
+        # tester l'erreur soulevée l'orsqu'on cherche à jouer un coup alors que la partie est déjà terminée
+        jeu_termine = Quoridor(partie_terminee_etat['joueurs'], partie_terminee_etat['murs'])     
+        self.assertRaisesRegex(QuoridorError, "La partie est déjà terminée!", jeu_termine.jouer_coup, 1)
+        # TODO: tester le fonctionnement sans erreurs   
+
 
     def test_partie_terminée(self):
-        self.assertEqual(Quoridor(déplacer_jeton(1, (9,1)), 1)
-""" 
-    def test_placer_mur(self):
-        etatdepartie3 = {
-                        "joueurs": [
-                            {"nom": "1", "murs": 1, "pos": []},
-                         ],
-                       "murs": {
-                             "horizontaux": [],
-                            "verticaux": [5, 2]
-                         }
-                     }
+        partie_terminee1_etat = {
+                                    "joueurs": [
+                                        {"nom": "joueur1", "murs": 7, "pos": [5, 9]},
+                                        {"nom": "joueur2", "murs": 3, "pos": [6, 9]}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+                                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+                                    }
+                                }
+        partie_terminee2_etat = {
+                                    "joueurs": [
+                                        {"nom": "joueur1", "murs": 7, "pos": [6, 1]},
+                                        {"nom": "joueur2", "murs": 3, "pos": [5, 1]}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+                                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+                                    }
+                                }
+        jeu_pas_fini = Quoridor(['joueur1', 'joueur2'])
+        self.assertEqual(jeu_pas_fini.partie_terminée(), False)
+        jeu_fini1 = Quoridor(partie_terminee1_etat['joueurs'], partie_terminee1_etat['murs'])
+        self.assertEqual(jeu_fini1.partie_terminée(), "joueur1")
+        jeu_fini2 = Quoridor(partie_terminee2_etat['joueurs'], partie_terminee2_etat['murs'])
+        self.assertEqual(jeu_fini2.partie_terminée(), "joueur2")
 
-        self.assertEqual(Quoridor(placer_mur(1, (5,2), "vertical")), etatdepartie3)
-"""
+    
+    def test_placer_mur(self):
+        jeu1_etat = {
+                                    "joueurs": [
+                                        {"nom": "joueur1", "murs": 7, "pos": [5, 5]},
+                                        {"nom": "joueur2", "murs": 3, "pos": [6, 9]}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+                                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+                                    }
+                                }
+
+
 #Lancer la batterie de tests unitaires l'orsque ce module est lancé en tant que main (pas importé)
 if __name__ == '__main__':
     unittest.main(argv=[''], verbosity=2, exit=False)
