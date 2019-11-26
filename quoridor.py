@@ -246,6 +246,8 @@ class Quoridor:
 
 
     def déplacer_jeton(self, joueur, position):
+        #ÉNONCÉ : appelées par jouer_coup, mais ce n'est pas elles qui implantent la stratégie de jeu.
+
         """
         déplacer_jeton
         Pour le joueur spécifié, déplacer son jeton à la position spécifiée
@@ -295,6 +297,16 @@ class Quoridor:
 
 
     def jouer_coup(self, joueur):
+        #ÉNONCÉ : Notez que votre méthode jouer_coup doit analyser l'état actuel du jeu afin de choisir automatiquement 
+        # le prochain coup du joueur spécifié. À cette étape, vous pouvez vous contenter d'implanter une méthode qui joue 
+        # sans intelligence, en respectant simplement les règles du jeu.
+
+        #ÉNONCÉ : Pour connaître l'ensemble des déplacements admissibles d'un joueur, il suffit d'interroger le graphe orienté en lui 
+        #         demandant de nous retourner les positions qui sont adjacentes à celle d'une certaine pastille. 
+        #         La méthode pour ça se nomme successors. 
+
+        #        Par exemple, pour connaître les déplacements possibles pour le joueur 1 situé en  (5,6) : (list(graphe.successors((5,6))))
+
         """
         jouer_coup        
         Pour le joueur spécifié, jouer automatiquement son meilleur
@@ -325,6 +337,7 @@ class Quoridor:
 
 
     def partie_terminée(self):
+        #ÉNONCÉ : Un joueur gagne la partie dès qu'il ateint la tuile qui précède immédiatement son objectif
         """
         partie_terminée        
         [extended_summary]
@@ -340,6 +353,13 @@ class Quoridor:
 
 
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
+        #ÉNONCÉ : appelées par jouer_coup, mais ce n'est pas elles qui implantent la stratégie de jeu.
+
+        #ÉNONCÉ : Pour savoir si un état de jeu enferme un joueur (lorsqu'on ajoute un mur), il suffit d'interroger networkx en lui demandant
+        #         s'il existe un chemin dans le graphe entre la position actuelle du joueur et son objectif. Pour ce faire, il s'agit 
+        #         d'appeler la fonction has_path.
+        #         Par exemple, pour le joueur 1 qui est en  (5,6)  et dont l'objectif est 'B1':  (nx.has_path(graphe, (5,6), 'B1'))
+
         """
         placer_mur        
         pour le joueur spécifié, placer un mur à la position spécifiée
@@ -514,10 +534,9 @@ class TestQuoridor(unittest.TestCase):
         self.assertRaisesRegex(QuoridorError, "joueur invalide!", Quoridor(jouer_coup(5)))
         self.assertRaisesRegex(QuoridorError, " La partie est déjà terminée!", jeu2.état_partie())        
 
- """ 
     def test_partie_terminée(self):
         self.assertEqual(Quoridor(déplacer_jeton(1, (9,1)), 1)
-
+""" 
     def test_placer_mur(self):
         etatdepartie3 = {
                         "joueurs": [
