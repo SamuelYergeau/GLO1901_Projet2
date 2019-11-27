@@ -155,12 +155,12 @@ class Quoridor:
                 # Vérifier si la position du mur est valide
                 if not(1 <= mur[0] <= 8) or not(2 <= mur[1] <= 9):
                     raise QuoridorError("position du mur non-valide!")
-                self.murh += [mur]
+                self.murh += [tuple(mur)]
             # itérer sur chaque mur vertical
             for mur in cmurs['verticaux']:
                 if not(2 <= mur[0] <= 9) or not(1 <= mur[1] <= 8):
                     raise QuoridorError("position du mur non-valide!")
-                self.murv += [mur]
+                self.murv += [tuple(mur)]
         # vérifier que joueurs est itérable et de longueur 2
         try:
             iterable = iter(cjoueurs)
@@ -187,6 +187,8 @@ class Quoridor:
                     raise QuoridorError("position du joueur invalide!")
                 # updater la valeur de joueur
                 self.joueurs[numero] = joueur
+                # vérifier que la position du joueur est storée comme tuple
+                self.joueurs[numero]['pos'] = tuple(self.joueurs[numero]['pos'])
         # Vérifier que le total des murs donne 20
         # TODO: placer avant la logique
         if (len(self.murh) + len(self.murv) + self.joueurs[0]['murs'] + self.joueurs[1]['murs']) != 20:
@@ -758,7 +760,7 @@ class TestQuoridor(unittest.TestCase):
         nouvellepartie = Quoridor(["joueur1", "joueur2"])
         self.assertEqual(nouvellepartie.état_partie(), nouvelle_partie_etat)
 
- 
+
     def test_jouer_coup(self):
         """test_jopuer_coup
         """

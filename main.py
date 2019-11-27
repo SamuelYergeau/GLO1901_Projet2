@@ -303,8 +303,9 @@ def loop(joueurs, jeu):
                 if joueurs[(n - 1)] == "robot":
                     jeu.jouer_coup(n)
                 else:
+                    print("tout à {}".format(joueurs[(n-1)]))
                     print("indiquer le type de coup à jouer")
-                    tcoup = input("D, MH ou MH: ").upper()
+                    tcoup = input("[D, MH ou MH]: ").upper()
                     posx = int(input("position en x du coup: "))
                     posy = int(input("position en y du coup: "))
                     # agir selon le type de coup
@@ -331,14 +332,34 @@ def loop(joueurs, jeu):
                 continue
 
 
+etat = {
+    "joueurs": [
+        {"nom": "idul", "murs": 7, "pos": [5, 6]},
+        {"nom": "automate", "murs": 3, "pos": [5, 7]}
+    ],
+    "murs": {
+        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+    }
+}
 #swag lines
 print('\n' + '~' * 39)
 print("BIENVENU DANS QUORIDOR!")
 print('~' * 39 + '\n')
-# obtenir le nom des deux joueurs
-print("veuillez entrer le nom des joueurs:")
-joueur1 = input("nom du joueur1: ")
-joueur2 = input("nom du joueur2: ")
-# demarrer une nouvelle partie
-jeu = quoridor.Quoridor([joueur1, joueur2])
-loop([joueur1, joueur2], jeu)
+# offrir de jouer une nouvelle partie ou reprendre une partie existante
+print("souhaitez vous commencer une nouvelle partie ou continuer une partie existante?")
+print("1 = nouvelle partie | 2 = partie existante")
+choix = int(input("choix: "))
+if choix == 1:
+    # obtenir le nom des deux joueurs
+    print("veuillez entrer le nom des joueurs:")
+    joueur1 = input("nom du joueur1: ")
+    joueur2 = input("nom du joueur2: ")
+    # demarrer une nouvelle partie
+    jeu = quoridor.Quoridor([joueur1, joueur2])
+    loop([joueur1, joueur2], jeu)
+elif choix == 2:
+    jeu = jeu = quoridor.Quoridor(etat['joueurs'], etat['murs'])
+    loop(["joueur1", "joueur2"], jeu)
+else:
+    print("choix invalide!")
