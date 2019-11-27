@@ -79,8 +79,8 @@ def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
 
 
 class QuoridorError(Exception):
-    """QuoridorError    
-    Classe pour gérer les exceptions survenue dans la classe Quoridor    
+    """QuoridorError 
+    Classe pour gérer les exceptions survenue dans la classe Quoridor
     Arguments:
         Exception {[type]} -- [description]
     """
@@ -108,8 +108,8 @@ class Quoridor:
                 murs horizontaux dans la partie
         """
         # définir les attribut de classes que nous allons utiliser
-        self.joueurs = [{'nom':'', 'murs': 0, 'pos':(0,0)},
-                        {'nom':'', 'murs': 0, 'pos':(0,0)}]
+        self.joueurs = [{'nom':'', 'murs': 0, 'pos':(0, 0)},
+                        {'nom':'', 'murs': 0, 'pos':(0, 0)}]
         self.murh = []
         self.murv = []
         starting_position = [(5, 1), (5, 9)]
@@ -119,17 +119,17 @@ class Quoridor:
         # vérifier si un dictionnaire de murs est présent
         if murs:
             # vérifier si murs est un tuple
-            if not(isinstance(cmurs, dict)):
+            if not isinstance(cmurs, dict):
                 raise QuoridorError("murs n'est pas un dictionnaire!")
             # itérer sur chaque mur horizontal
             for mur in cmurs['horizontaux']:
                 # Vérifier si la position du mur est valide
-                if not(1 <= mur[0] <= 8) or not(2 <= mur[1] <= 9):
+                if not 1 <= mur[0] <= 8 or not 2 <= mur[1] <= 9:
                     raise QuoridorError("position du mur non-valide!")
                 self.murh += [tuple(mur)]
             # itérer sur chaque mur vertical
             for mur in cmurs['verticaux']:
-                if not(2 <= mur[0] <= 9) or not(1 <= mur[1] <= 8):
+                if not 2 <= mur[0] <= 9 or not 1 <= mur[1] <= 8:
                     raise QuoridorError("position du mur non-valide!")
                 self.murv += [tuple(mur)]
         # vérifier que joueurs est itérable et de longueur 2
@@ -151,10 +151,10 @@ class Quoridor:
                 self.joueurs[numero]['pos'] = starting_position[numero]
             else:
                 # vérifier que les murs sont legit
-                if  not(0 <= joueur['murs'] <= 10):
+                if  not 0 <= joueur['murs'] <= 10:
                     raise QuoridorError("mauvais nombre de murs!")
                 # Vérifier que la position du joueur est valide
-                if not(1 <= joueur['pos'][0] <= 9) or not(1 <= joueur['pos'][1] <= 9):
+                if not 1 <= joueur['pos'][0] <= 9 or not 1 <= joueur['pos'][1] <= 9:
                     raise QuoridorError("position du joueur invalide!")
                 # updater la valeur de joueur
                 self.joueurs[numero] = joueur
@@ -216,7 +216,7 @@ class Quoridor:
                 raise IndexError("Adresse du joueur invalide!")
             # calcul du décallage relatif au tableau
             indice = (game_pos_x[(position[0] - 1)] +
-                    (game_pos_y[(position[1] - 1)] * spacing_horizontal))
+                      (game_pos_y[(position[1] - 1)] * spacing_horizontal))
             decallage = ((((indice + 1) // spacing_horizontal) * 2) + 2)
             indice += decallage
             # Insérer le personnage dans le tableau de jeu
@@ -228,7 +228,7 @@ class Quoridor:
                     (2 > murh[1] > board_positions)):
                 raise IndexError("Position du mur horizontal invalide!")
             indice = ((game_pos_x[(murh[0] - 1)] - 1) +
-                    ((game_pos_y[(murh[1] - 1)] + 1) * spacing_horizontal))
+                      ((game_pos_y[(murh[1] - 1)] + 1) * spacing_horizontal))
             decallage = ((((indice + 1) // spacing_horizontal) * 2) + 2)
             indice += decallage
             # itérer pour placer les 5 murs
@@ -240,7 +240,7 @@ class Quoridor:
             if (2 > murv[0] > board_positions) or (1 > murv[1] > board_positions):
                 raise IndexError("Position du mur vertical invalide!")
             indice = ((game_pos_x[(murv[0] - 1)] - 2) +
-                    (game_pos_y[(murv[1] - 1)] * spacing_horizontal))
+                      (game_pos_y[(murv[1] - 1)] * spacing_horizontal))
             decallage = ((((indice + 1) // spacing_horizontal) * 2) + 2)
             indice += decallage
             # itérer pour placer les 3 murs
@@ -264,7 +264,7 @@ class Quoridor:
         if joueur != 1 and joueur != 2:
             raise QuoridorError("joueur invalide!")
         # Vérifier que la position du joueur est valide
-        if not(1 <= position[0] <= 9) or not(1 <= position[1] <= 9):
+        if not 1 <= position[0] <= 9 or not 1 <= position[1] <= 9:
             raise QuoridorError("position invalide!")
         # créer un graphe des mouvements possible à jouer
         graphe = construire_graphe(
@@ -273,7 +273,7 @@ class Quoridor:
             self.murv
         )
         # vérifier si le mouvement est valide
-        if not(position in list(graphe.successors((self.joueurs[(joueur - 1)]['pos'])))):
+        if not position in list(graphe.successors((self.joueurs[(joueur - 1)]['pos']))):
             raise QuoridorError("mouvement invalide!")
         # Changer la position du joueur
         self.joueurs[(joueur - 1)]['pos'] = position
@@ -281,7 +281,7 @@ class Quoridor:
 
     def état_partie(self):
         """
-        état_partie        
+        état_partie
         Produit l'état actuel du jeu sous la forme d'un dictionnaire
         Arguments: None
         Return:
@@ -299,14 +299,14 @@ class Quoridor:
         """
         return {"joueurs": self.joueurs,
                 "murs":{
-                        "horizontaux": self.murh,
-                        "verticaux": self.murv
-                        }}
+                    "horizontaux": self.murh,
+                    "verticaux": self.murv
+                    }}
 
 
     def jouer_coup(self, joueur):
         """
-        jouer_coup        
+        jouer_coup
         Pour le joueur spécifié, jouer automatiquement son meilleur
         coup pour l'état actuel de la partie. Ce coup est soit le déplacement de son jeton,
         soit le placement d'un mur horizontal ou vertical.
@@ -329,14 +329,16 @@ class Quoridor:
             self.murh,
             self.murv
         )
-        coup_a_jouer = nx.shortest_path(graphe, self.joueurs[(joueur - 1)]['pos'], objectifs[(joueur - 1)])[1]
+        coup_a_jouer = nx.shortest_path(graphe,
+                                        self.joueurs[(joueur - 1)]['pos'],
+                                        objectifs[(joueur - 1)])[1]
         # jouer le coup
         self.déplacer_jeton(joueur, coup_a_jouer)
 
 
     def partie_terminée(self):
         """
-        partie_terminée        
+        partie_terminée
         Évalue si la partie est terminée
         Arguments: None
         Return: le nom du joueur si un joueur a gagné. Sinon False
@@ -354,7 +356,7 @@ class Quoridor:
 
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
         """
-        placer_mur        
+        placer_mur
         pour le joueur spécifié, placer un mur à la position spécifiée
         Arguments:
             joueur {int} -- Le numéro du joueur (1 ou 2)
@@ -373,7 +375,7 @@ class Quoridor:
         # Si le mur est horizontal
         if orientation == 'horizontal':
             # vérifier si les positions sont dans les limites du jeu
-            if not(1 <= position[0] <= 8) or not(2 <= position[1] <= 9):
+            if not 1 <= position[0] <= 8 or not 2 <= position[1] <= 9:
                 raise QuoridorError("position du mur invalide!")
             # vérifier si l'emplacement est déjà occupé
             if (position[0], position[1]) in self.murh:
@@ -389,7 +391,7 @@ class Quoridor:
             )
             # vérifier si placer ce mur enfermerais un joueur
             for i in range(2):
-                if not(nx.has_path(graphe, (self.joueurs[i]['pos']), objectif[i])):
+                if not nx.has_path(graphe, (self.joueurs[i]['pos']), objectif[i]):
                     raise QuoridorError("ce coup enfermerait un joueur")
             # placer le mur
             self.murh += [position]
@@ -398,7 +400,7 @@ class Quoridor:
         # Si c'est un mur vertical
         elif orientation == 'vertical':
             # vérifier si les positions sont dans les limites du jeu
-            if not(2 <= position[0] <= 9) or not(1 <= position[1] <= 8):
+            if not 2 <= position[0] <= 9 or not 1 <= position[1] <= 8:
                 raise QuoridorError("position du mur invalide!")
             # vérifier si l'emplacement est déjà occupé
             if (position[0], position[1]) in self.murv:
@@ -414,7 +416,7 @@ class Quoridor:
             )
             # vérifier si placer ce mur enfermerais le joueur
             for i in range(2):
-                if not(nx.has_path(graphe, (self.joueurs[i]['pos']), objectif[i])):
+                if not nx.has_path(graphe, (self.joueurs[i]['pos']), objectif[i]):
                     raise QuoridorError("ce coup enfermerait un joueur")
             # placer le mur
             self.murv += [position]
@@ -426,7 +428,7 @@ class Quoridor:
 
 
 class TestQuoridor(unittest.TestCase):
-    
+
     def test__init__(self):
         """test la fonction __init
             Cas à tester:
@@ -441,57 +443,56 @@ class TestQuoridor(unittest.TestCase):
         """
         # Dresser des tableaux connus pour des constructions connues
         nouveau_jeu = ("légende: 1=foo 2=bar\n" +
-                        "   -----------------------------------\n" +
-                        "9 | .   .   .   .   2   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "8 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "7 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "6 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "5 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "4 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "3 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "2 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "1 | .   .   .   .   1   .   .   .   . |\n" +
-                        "--|-----------------------------------\n" +
-                        "  | 1   2   3   4   5   6   7   8   9\n")
+                       "   -----------------------------------\n" +
+                       "9 | .   .   .   .   2   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "8 | .   .   .   .   .   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "7 | .   .   .   .   .   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "6 | .   .   .   .   .   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "5 | .   .   .   .   .   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "4 | .   .   .   .   .   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "3 | .   .   .   .   .   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "2 | .   .   .   .   .   .   .   .   . |\n" +
+                       "  |                                   |\n" +
+                       "1 | .   .   .   .   1   .   .   .   . |\n" +
+                       "--|-----------------------------------\n" +
+                       "  | 1   2   3   4   5   6   7   8   9\n")
         partie_existante_tableau = ("légende: 1=foo 2=bar\n" +
-                        "   -----------------------------------\n" +
-                        "9 | .   .   .   .   .   .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "8 | .   .   .   .   .   . | .   .   . |\n" +
-                        "  |        ------- -------|-------    |\n" +
-                        "7 | .   .   .   .   2   . | .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "6 | . | .   .   .   1   . | .   .   . |\n" +
-                        "  |   |-------            |           |\n" +
-                        "5 | . | .   . | .   .   . | .   .   . |\n" +
-                        "  |           |                       |\n" +
-                        "4 | .   .   . | .   .   .   .   .   . |\n" +
-                        "  |            -------                |\n" +
-                        "3 | .   .   .   .   . | .   .   .   . |\n" +
-                        "  |                   |               |\n" +
-                        "2 | .   .   .   .   . | .   .   .   . |\n" +
-                        "  |                                   |\n" +
-                        "1 | .   .   .   .   .   .   .   .   . |\n" +
-                        "--|-----------------------------------\n" +
-                        "  | 1   2   3   4   5   6   7   8   9\n")
+                                    "   -----------------------------------\n" +
+                                    "9 | .   .   .   .   .   .   .   .   . |\n" +
+                                    "  |                                   |\n" +
+                                    "8 | .   .   .   .   .   . | .   .   . |\n" +
+                                    "  |        ------- -------|-------    |\n" +
+                                    "7 | .   .   .   .   2   . | .   .   . |\n" +
+                                    "  |                                   |\n" +
+                                    "6 | . | .   .   .   1   . | .   .   . |\n" +
+                                    "  |   |-------            |           |\n" +
+                                    "5 | . | .   . | .   .   . | .   .   . |\n" +
+                                    "  |           |                       |\n" +
+                                    "4 | .   .   . | .   .   .   .   .   . |\n" +
+                                    "  |            -------                |\n" +
+                                    "3 | .   .   .   .   . | .   .   .   . |\n" +
+                                    "  |                   |               |\n" +
+                                    "2 | .   .   .   .   . | .   .   .   . |\n" +
+                                    "  |                                   |\n" +
+                                    "1 | .   .   .   .   .   .   .   .   . |\n" +
+                                    "--|-----------------------------------\n" +
+                                    "  | 1   2   3   4   5   6   7   8   9\n")
         partie_existante_etat = {
-                                    "joueurs": [
-                                        {"nom": "foo", "murs": 7, "pos": [5, 6]},
-                                        {"nom": "bar", "murs": 3, "pos": [5, 7]}
-                                    ],
-                                    "murs": {
-                                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
-                                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
-                                    }
-                                }
+            "joueurs": [
+                {"nom": "foo", "murs": 7, "pos": [5, 6]},
+                {"nom": "bar", "murs": 3, "pos": [5, 7]}
+            ],
+            "murs": {
+                "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
+                "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+            }}
         # Test de création d'une partie nouvelle
         self.assertEqual(str(Quoridor(["foo", "bar"])), nouveau_jeu)
         # Test de création d'une partie déjà existante

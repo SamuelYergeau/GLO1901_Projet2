@@ -277,28 +277,26 @@ def boucler():
         afficher_damier_ascii(newboard['état'])
 
 
-'''
-# fonction pour le projet 1
-if __name__ == "__main__":
-    #  écouter si le joueur veut commencer une partie
-    COM = analyser_commande()
-    # vérifier si l'argument lister a été appelé
-    if 'lister' in COM and COM.lister:
-        # appeler la fonction lister
-        listing(COM.idul)
-    else:
-        # débuter la partie et storer le id de la partie
-        GAME_ID += debuter(COM)
-        # boucler sur la logique de la partie
-        boucler()'''
-
 def loop(joueurs, jeu):
     """loop
         Simple fonction pour tester quoridor.py
+        # fonction pour le projet 1
+        if __name__ == "__main__":
+            #  écouter si le joueur veut commencer une partie
+            COM = analyser_commande()
+            # vérifier si l'argument lister a été appelé
+            if 'lister' in COM and COM.lister:
+                # appeler la fonction lister
+                listing(COM.idul)
+            else:
+                # débuter la partie et storer le id de la partie
+                GAME_ID += debuter(COM)
+                # boucler sur la logique de la partie
+                boucler()
     """
     while True:
         # Itérer sur les deux joueurs
-        for n in range(1,3):
+        for n in range(1, 3):
             try:
                 # afficher le jeu
                 print(jeu)
@@ -335,7 +333,7 @@ def loop(joueurs, jeu):
                 continue
 
 
-etat = {
+ETAT_JEU = {
     "joueurs": [
         {"nom": "idul", "murs": 7, "pos": [5, 6]},
         {"nom": "automate", "murs": 3, "pos": [5, 7]}
@@ -352,17 +350,17 @@ print('~' * 39 + '\n')
 # offrir de jouer une nouvelle partie ou reprendre une partie existante
 print("souhaitez vous commencer une nouvelle partie ou continuer une partie existante?")
 print("1 = nouvelle partie | 2 = partie existante")
-choix = int(input("choix: "))
-if choix == 1:
+CHOIX = int(input("choix: "))
+if CHOIX == 1:
     # obtenir le nom des deux joueurs
     print("veuillez entrer le nom des joueurs:")
-    joueur1 = input("nom du joueur1: ")
-    joueur2 = input("nom du joueur2: ")
+    JOUEUR1 = input("nom du joueur1: ")
+    JOUEUR2 = input("nom du joueur2: ")
     # demarrer une nouvelle partie
-    jeu = quoridor.Quoridor([joueur1, joueur2])
-    loop([joueur1, joueur2], jeu)
-elif choix == 2:
-    jeu = jeu = quoridor.Quoridor(etat['joueurs'], etat['murs'])
-    loop(["joueur1", "joueur2"], jeu)
+    JEU = quoridor.Quoridor([JOUEUR1, JOUEUR2])
+    loop([JOUEUR1, JOUEUR2], JEU)
+elif CHOIX == 2:
+    JEU = quoridor.Quoridor(ETAT_JEU['joueurs'], ETAT_JEU['murs'])
+    loop(["joueur1", "joueur2"], JEU)
 else:
     print("choix invalide!")
