@@ -79,7 +79,7 @@ def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
 
 
 class QuoridorError(Exception):
-    """QuoridorError 
+    """QuoridorError
     Classe pour gérer les exceptions survenue dans la classe Quoridor
     Arguments:
         Exception {[type]} -- [description]
@@ -162,7 +162,10 @@ class Quoridor:
                 self.joueurs[numero]['pos'] = tuple(self.joueurs[numero]['pos'])
         # Vérifier que le total des murs donne 20
         # TODO: placer avant la logique
-        if (len(self.murh) + len(self.murv) + self.joueurs[0]['murs'] + self.joueurs[1]['murs']) != 20:
+        if (len(self.murh) +
+            len(self.murv) +
+            self.joueurs[0]['murs'] +
+            self.joueurs[1]['murs']) != 20:
             raise QuoridorError("mauvaise quantité totale de murs!")
         
 
@@ -515,30 +518,30 @@ class TestQuoridor(unittest.TestCase):
                                "mauvais nombre de murs!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 11, "pos": (5, 6)},
-                                    {"nom": "bar", "murs": 10, "pos": (5, 7)}
+                                   {"nom": "foo", "murs": 11, "pos": (5, 6)},
+                                   {"nom": "bar", "murs": 10, "pos": (5, 7)}
                                ])
         self.assertRaisesRegex(QuoridorError,
                                "mauvais nombre de murs!",
                                Quoridor,
                                [
-                                    {"nom": "joueur1", "murs": 10, "pos": (5, 6)},
-                                    {"nom": "joueur2", "murs": -1, "pos": (5, 7)}
+                                   {"nom": "joueur1", "murs": 10, "pos": (5, 6)},
+                                   {"nom": "joueur2", "murs": -1, "pos": (5, 7)}
                                ])
         # Test de l'erreur soulevée si la position d'un joueur est invalide
         self.assertRaisesRegex(QuoridorError,
                                "position du joueur invalide!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 10, "pos": (5, 10)},
-                                    {"nom": "bar", "murs": 10, "pos": (5, 5)}
+                                   {"nom": "foo", "murs": 10, "pos": (5, 10)},
+                                   {"nom": "bar", "murs": 10, "pos": (5, 5)}
                                ])
         self.assertRaisesRegex(QuoridorError,
                                "position du joueur invalide!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 10, "pos": (5, 10)},
-                                    {"nom": "bar", "murs": 10, "pos": (5, 5)}
+                                   {"nom": "foo", "murs": 10, "pos": (5, 10)},
+                                   {"nom": "bar", "murs": 10, "pos": (5, 5)}
                                ])
         # Test de l'erreur soulevée si l'argument "mur" n'est pas un dictionnaire lorsque présent
         self.assertRaisesRegex(QuoridorError,
@@ -551,62 +554,31 @@ class TestQuoridor(unittest.TestCase):
                                "mauvaise quantité totale de murs!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 5, "pos": (5, 6)},
-                                    {"nom": "bar", "murs": 10, "pos": (5, 7)}
+                                   {"nom": "foo", "murs": 5, "pos": (5, 6)},
+                                   {"nom": "bar", "murs": 10, "pos": (5, 7)}
                                ])
         self.assertRaisesRegex(QuoridorError,
                                "mauvaise quantité totale de murs!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 8, "pos": (5, 6)},
-                                    {"nom": "bar", "murs": 3, "pos": (5, 7)}
+                                   {"nom": "foo", "murs": 8, "pos": (5, 6)},
+                                   {"nom": "bar", "murs": 3, "pos": (5, 7)}
                                ],
                                {
-                                    "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
-                                    "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
+                                   "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
+                                   "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
                                })
         # Test de l'erreur soulevée si la position d'un mur est invalide
         self.assertRaisesRegex(QuoridorError,
                                "position du mur non-valide!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 9, "pos": (3, 3)},
-                                    {"nom": "bar", "murs": 9, "pos": (7, 7)}
+                                   {"nom": "foo", "murs": 9, "pos": (3, 3)},
+                                   {"nom": "bar", "murs": 9, "pos": (7, 7)}
                                ],
                                {
-                                    "horizontaux": [(0, 5)],
-                                    "verticaux": [(5, 5)]
-                               })
-        self.assertRaisesRegex(QuoridorError,
-                               "position du mur non-valide!",
-                               Quoridor,
-                               [
-                                    {"nom": "foo", "murs": 9, "pos": (3, 3)},
-                                    {"nom": "bar", "murs": 9, "pos": (7, 7)}
-                               ],
-                               {
-                                    "horizontaux": [(9, 5)],
-                                    "verticaux": [(5, 5)]
-                               })                                              
-        self.assertRaisesRegex(QuoridorError,
-                               "position du mur non-valide!", Quoridor,
-                               [
-                                    {"nom": "foo", "murs": 9, "pos": (3, 3)},
-                                    {"nom": "bar", "murs": 9, "pos": (7, 7)}
-                               ],
-                               {
-                                    "horizontaux": [(5, 1)],
-                                    "verticaux": [(5, 5)]
-                               })
-        self.assertRaisesRegex(QuoridorError,
-                               "position du mur non-valide!", Quoridor,
-                               [
-                                    {"nom": "foo", "murs": 9, "pos": (3, 3)},
-                                    {"nom": "bar", "murs": 9, "pos": (7, 7)}
-                               ],
-                               {
-                                    "horizontaux": [(5, 10)],
-                                    "verticaux": [(5, 5)]
+                                   "horizontaux": [(0, 5)],
+                                   "verticaux": [(5, 5)]
                                })
         self.assertRaisesRegex(QuoridorError,
                                "position du mur non-valide!",
@@ -616,8 +588,39 @@ class TestQuoridor(unittest.TestCase):
                                    {"nom": "bar", "murs": 9, "pos": (7, 7)}
                                ],
                                {
-                                    "horizontaux": [(5, 5)],
-                                    "verticaux": [(1, 5)]
+                                   "horizontaux": [(9, 5)],
+                                   "verticaux": [(5, 5)]
+                               })                                              
+        self.assertRaisesRegex(QuoridorError,
+                               "position du mur non-valide!", Quoridor,
+                               [
+                                   {"nom": "foo", "murs": 9, "pos": (3, 3)},
+                                   {"nom": "bar", "murs": 9, "pos": (7, 7)}
+                               ],
+                               {
+                                   "horizontaux": [(5, 1)],
+                                   "verticaux": [(5, 5)]
+                               })
+        self.assertRaisesRegex(QuoridorError,
+                               "position du mur non-valide!", Quoridor,
+                               [
+                                   {"nom": "foo", "murs": 9, "pos": (3, 3)},
+                                   {"nom": "bar", "murs": 9, "pos": (7, 7)}
+                               ],
+                               {
+                                   "horizontaux": [(5, 10)],
+                                   "verticaux": [(5, 5)]
+                               })
+        self.assertRaisesRegex(QuoridorError,
+                               "position du mur non-valide!",
+                               Quoridor,
+                               [
+                                   {"nom": "foo", "murs": 9, "pos": (3, 3)},
+                                   {"nom": "bar", "murs": 9, "pos": (7, 7)}
+                               ],
+                               {
+                                   "horizontaux": [(5, 5)],
+                                   "verticaux": [(1, 5)]
                                })
         self.assertRaisesRegex(QuoridorError,
                                "position du mur non-valide!",
@@ -634,23 +637,23 @@ class TestQuoridor(unittest.TestCase):
                                "position du mur non-valide!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 9, "pos": (3, 3)},
-                                    {"nom": "bar", "murs": 9, "pos": (7, 7)}
+                                   {"nom": "foo", "murs": 9, "pos": (3, 3)},
+                                   {"nom": "bar", "murs": 9, "pos": (7, 7)}
                                ],
                                {
-                                    "horizontaux": [(5, 5)],
-                                    "verticaux": [(5, 0)]
+                                   "horizontaux": [(5, 5)],
+                                   "verticaux": [(5, 0)]
                                })
         self.assertRaisesRegex(QuoridorError,
                                "position du mur non-valide!",
                                Quoridor,
                                [
-                                    {"nom": "foo", "murs": 9, "pos": (3, 3)},
-                                    {"nom": "bar", "murs": 9, "pos": (7, 7)}
+                                   {"nom": "foo", "murs": 9, "pos": (3, 3)},
+                                   {"nom": "bar", "murs": 9, "pos": (7, 7)}
                                ],
                                {
-                                    "horizontaux": [(5, 5)],
-                                    "verticaux": [(5, 9)]
+                                   "horizontaux": [(5, 5)],
+                                   "verticaux": [(5, 9)]
                                })
 
 
