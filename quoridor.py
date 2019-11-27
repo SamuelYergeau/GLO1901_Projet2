@@ -544,6 +544,26 @@ class TestQuoridor(unittest.TestCase):
                         "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
                     }
                 }
+        etat_partie2 = {
+                    "joueurs": [
+                        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
+                        {"nom": "joueur2", "murs": 3, "pos": (5, 5)}
+                    ],
+                    "murs": {
+                        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
+                        "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
+                    }
+                }
+        etat_partie3 = {
+                    "joueurs": [
+                        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
+                        {"nom": "joueur2", "murs": 3, "pos": (6, 5)}
+                    ],
+                    "murs": {
+                        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
+                        "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
+                    }
+                }
         nouveaujeu = Quoridor(["joueur1", "joueur2"])
         # Tester l'erreur soulevée si le joueur indiqué est invalide
         self.assertRaisesRegex(QuoridorError, "joueur invalide!", nouveaujeu.déplacer_jeton, 5, (5, 2))
@@ -555,6 +575,15 @@ class TestQuoridor(unittest.TestCase):
         # Tester l'erreur soulevée si la position demandée n'est pas accessible au joueur
         jeu = Quoridor(etat_partie['joueurs'], etat_partie['murs'])
         self.assertRaisesRegex(QuoridorError, "mouvement invalide!", jeu.déplacer_jeton, 2, (5, 8))
+        self.assertRaisesRegex(QuoridorError, "mouvement invalide!", jeu.déplacer_jeton, 1, (5, 8))
+        self.assertRaisesRegex(QuoridorError, "mouvement invalide!", jeu.déplacer_jeton, 2, (3, 7))
+        self.assertRaisesRegex(QuoridorError, "mouvement invalide!", jeu.déplacer_jeton, 2, (4, 6))
+        self.assertRaisesRegex(QuoridorError, "mouvement invalide!", jeu.déplacer_jeton, 2, (6, 6))
+        # Tester des déplacements qui fonctionnent
+        jeu.déplacer_jeton(2, (5, 5))
+        self.assertEqual(jeu.état_partie(), etat_partie2)
+        jeu.déplacer_jeton(2, (6, 5))
+        self.assertEqual(jeu.état_partie(), etat_partie3)
 
 
         #NOTE: n'oubliez pas de tester TOUTEs les situations possibles. Il faut bien entendu tester celles où la fonction fonctionne bien.
