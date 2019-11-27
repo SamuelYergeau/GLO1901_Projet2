@@ -412,7 +412,7 @@ class Quoridor:
             if (position[0], position[1]) in self.murh:
                 raise QuoridorError("Il y a déjà un mur!")
             # Prendre en compte le décalage des murs
-            if ((position[0] + 1), position[1]) in self.murh:
+            if ((position[0] - 1), position[1]) in self.murh:
                 raise QuoridorError("Il y a déjà un mur!")
             # créer un graphe des mouvements possible à jouer avec le mur ajouté
             graphe = construire_graphe(
@@ -429,7 +429,7 @@ class Quoridor:
             # retirer un mur des murs plaçables du joueurs
             self.joueurs[(joueur - 1)]['murs'] -= 1
         # Si c'est un mur vertical
-        else:
+        elif orientation == 'vertical':
             # vérifier si les positions sont dans les limites du jeu
             if 2 > position[0] > 9 or 1 > position[1] > 8:
                 raise QuoridorError("position du mur invalide!")
@@ -437,7 +437,7 @@ class Quoridor:
             if (position[0], position[1]) in self.murv:
                 raise QuoridorError("Il y a déjà un mur!")
             # Prendre en compte le décalage des murs
-            if (position[0], (position[1] + 1)) in self.murv:
+            if (position[0], (position[1] - 1)) in self.murv:
                 raise QuoridorError("Il y a déjà un mur!")
             # créer un graphe des mouvements possible à jouer avec le mur ajouté
             graphe = construire_graphe(
@@ -453,6 +453,9 @@ class Quoridor:
             self.murv += [position]
             # retirer un mur des murs plaçables du joueurs
             self.joueurs[(joueur - 1)]['murs'] -= 1
+        # Si l'orientation n'est ni horizontal ni vertical, soulever une exception
+        else:
+            raise QuoridorError("orientation invalide!")
 
 
 #NOTE: J'ai changé le nom de la classe pour que celle-ci soit plus significative
@@ -611,14 +614,52 @@ class TestQuoridor(unittest.TestCase):
     def test_placer_mur(self):
         jeu1_etat = {
                                     "joueurs": [
-                                        {"nom": "joueur1", "murs": 7, "pos": [5, 5]},
-                                        {"nom": "joueur2", "murs": 3, "pos": [6, 9]}
+                                        {"nom": "joueur1", "murs": 9, "pos": (5, 1)},
+                                        {"nom": "joueur2", "murs": 9, "pos": (5, 9)}
                                     ],
                                     "murs": {
-                                        "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
-                                        "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
+                                        "horizontaux": [(4, 4)],
+                                        "verticaux": [(6, 6)]
                                     }
                                 }
+        jeu2_etat = {
+                                    "joueurs": [
+                                        {"nom": "joueur1", "murs": 8, "pos": (5, 1)},
+                                        {"nom": "joueur2", "murs": 8, "pos": (5, 9)}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [(4, 4), (5, 5)],
+                                        "verticaux": [(6, 6), (7, 7)]
+                                    }
+                                }
+        jeu3_etat = {
+                                    "joueurs": [
+                                        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
+                                        {"nom": "joueur2", "murs": 0, "pos": (5, 7)}
+                                    ],
+                                    "murs": {
+                                        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
+                                        "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7), (2, 2), (2, 3), (2, 4)]
+                                    }
+                                }
+        jeu1 = Quoridor(jeu1_etat['joueurs'], jeu1_etat['murs'])
+        # Tester si le mur est bien placé avec les 2 joueurs
+        jeu1.placer_mur(1, (5, 5), 'horizontal')
+        jeu1.placer_mur(2, (7, 7), 'vertical')
+        self.assertEqual(jeu1.état_partie(), jeu2_etat)
+        # Tester l'erreur si le numéro du joueur n'est pas bon
+        self.assertRaisesRegex(QuoridorError, "joueur invalide!", jeu1.placer_mur, 5, (2, 2), 'horizontal')
+        # Tester l'erreur si le joueur ne peut plus placer de murs
+        jeu3 = Quoridor(jeu3_etat['joueurs'], jeu3_etat['murs'])
+        self.assertRaisesRegex(QuoridorError, "le joueur ne peut plus placer de murs!", jeu3.placer_mur, 2, (2, 2), 'horizontal')
+        # Tester l'erreur si l'emplacement est déjà occupé pour un mur horizontal --> position exacte
+        self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!", jeu3.placer_mur, 1, (4, 4), 'horizontal')
+        # Position décallée
+        self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!", jeu3.placer_mur, 1, (5, 4), 'horizontal')
+        # Tester l'erreur si l'emplacement est déjà occupé pour un mur vertical --> position exacte
+        self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!", jeu3.placer_mur, 1, (4, 4), 'vertical')
+        # Position décallée
+        self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!", jeu3.placer_mur, 1, (4, 5), 'vertical')
 
 
 #Lancer la batterie de tests unitaires l'orsque ce module est lancé en tant que main (pas importé)
