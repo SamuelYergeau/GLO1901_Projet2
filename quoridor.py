@@ -1,31 +1,3 @@
-#1)Fonctionnement de base de la classe Quoridor (30%)
-
-#1.1)On peut construire une instance de la classe en spécifiant une liste de deux noms de joueurs. 
-#Cette instance est construite avec l'état initial d'une nouvelle partie.
-
-#1.2)On peut afficher en art ascii une représentation de l'état actuel de la partie en passant l'instance directement à la fonction print, 
-#tel que décrit par l'énoncé.
-
-#1.3)On peut récupérer le dictionnaire de l'état actuel de la partie grâce à la méthode état_parti, tel que décrit par l'énoncé.
-
-#1.4)Avec des numéros de joueur et des positions valides, on peut déplacer les jetons des joueurs et placer des murs grâce aux méthodes
-#  déplacer_jeton et placer_mur, tout en maintenant l'état de la partie à jour et conforme à l'énoncé.
-
-#1.5)Lorsqu'un joueur gagne la partie, on peut le savoir grâce à la méthode partie_terminée, tel que décrit par l'énoncé.
-
-#2)Initialisation d'une partie en cours (10%)
-#2.1)On peut construire une instance de la classe Quoridor à partir de joueurs et de murs déjà positionnés à des emplacements valides
-
-
-#3)Détection des erreurs (10%)
-#3.1)Une classe QuoridorError est bien définie dans le module quoridor
-#Les méthodes de la classe Quoridor soulèvent bien une instance de QuoridorError, 
-#pour toutes les combinaisons invalides de leurs arguments.
-
-
-#4) Choix automatique du prochain coup (10%)
-#4.1)La méthode jouer_coup choisit toujours un coup valide pour le joueur spécifié, peu importe l'état actuel de la partie.
-
 """ Quoridor.py
 Module qui enferme les classes d'encapsulation
 de la structure du jeu
@@ -134,8 +106,7 @@ class Quoridor:
             -- 'horzontaux': [list of tuples]
                 Une liste de tuples (x, y) représentant la position des différents
                 murs horizontaux dans la partie
-        TODO: faire une copie profonde au lieu d'unne copie normale (voir fil 1764)
-        *** copy.deepcopy(x[,memo]) ou memo est le dictionnaire des objets déjà copié"""
+        """
         # définir les attribut de classes que nous allons utiliser
         self.joueurs = [{'nom':'', 'murs': 0, 'pos':(0,0)},
                         {'nom':'', 'murs': 0, 'pos':(0,0)}]
@@ -201,6 +172,7 @@ class Quoridor:
         Produit la représentation en art ascii correspondant à l'état actuel de la partie
         Returns:
             board (str)
+                Une représentation en art ascii de la table de jeu
         """
         # définition des contraintes du tableau de jeu
         # permet de modifier la taille du jeu si désiré
@@ -279,11 +251,14 @@ class Quoridor:
 
 
     def déplacer_jeton(self, joueur, position):
-        #ÉNONCÉ : appelées par jouer_coup, mais ce n'est pas elles qui implantent la stratégie de jeu.
-
         """
         déplacer_jeton
         Pour le joueur spécifié, déplacer son jeton à la position spécifiée
+        Arguments:
+            joueur (int): 1 ou 2
+            position (tuple):
+                Le tuple (x, y) de la position où déplacer le jeton
+        Return: None
         """
         # Vérifier que le joueur est valide
         if joueur != 1 and joueur != 2:
@@ -308,7 +283,7 @@ class Quoridor:
         """
         état_partie        
         Produit l'état actuel du jeu sous la forme d'un dictionnaire
-        input: None
+        Arguments: None
         Return:
             une copie de l'état actuel du jeu sous la forme d'un dictionnaire
             {
@@ -330,16 +305,6 @@ class Quoridor:
 
 
     def jouer_coup(self, joueur):
-        #ÉNONCÉ : Notez que votre méthode jouer_coup doit analyser l'état actuel du jeu afin de choisir automatiquement 
-        # le prochain coup du joueur spécifié. À cette étape, vous pouvez vous contenter d'implanter une méthode qui joue 
-        # sans intelligence, en respectant simplement les règles du jeu.
-
-        #ÉNONCÉ : Pour connaître l'ensemble des déplacements admissibles d'un joueur, il suffit d'interroger le graphe orienté en lui 
-        #         demandant de nous retourner les positions qui sont adjacentes à celle d'une certaine pastille. 
-        #         La méthode pour ça se nomme successors. 
-
-        #        Par exemple, pour connaître les déplacements possibles pour le joueur 1 situé en  (5,6) : (list(graphe.successors((5,6))))
-
         """
         jouer_coup        
         Pour le joueur spécifié, jouer automatiquement son meilleur
@@ -348,6 +313,7 @@ class Quoridor:
         Arguments:
             joueur {int} -- un entier spécifiant le numéro du joueur (1 ou 2)
         NOTE: version temporaire et stupide! à optimiser!
+        Return: None
         """
         # objectifs
         objectifs = ['B1', 'B2']
@@ -365,15 +331,15 @@ class Quoridor:
         )
         coup_a_jouer = nx.shortest_path(graphe, self.joueurs[(joueur - 1)]['pos'], objectifs[(joueur - 1)])[1]
         # jouer le coup
-        # TODO: compléter pour faire plus que juste bouger le jeton
         self.déplacer_jeton(joueur, coup_a_jouer)
 
 
     def partie_terminée(self):
-        #ÉNONCÉ : Un joueur gagne la partie dès qu'il ateint la tuile qui précède immédiatement son objectif
         """
         partie_terminée        
-        [extended_summary]
+        Évalue si la partie est terminée
+        Arguments: None
+        Return: le nom du joueur si un joueur a gagné. Sinon False
         """
         # definir les conditions de victoire
         condition_de_victoire = [9, 1]
@@ -387,13 +353,6 @@ class Quoridor:
 
 
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
-        #ÉNONCÉ : appelées par jouer_coup, mais ce n'est pas elles qui implantent la stratégie de jeu.
-
-        #ÉNONCÉ : Pour savoir si un état de jeu enferme un joueur (lorsqu'on ajoute un mur), il suffit d'interroger networkx en lui demandant
-        #         s'il existe un chemin dans le graphe entre la position actuelle du joueur et son objectif. Pour ce faire, il s'agit 
-        #         d'appeler la fonction has_path.
-        #         Par exemple, pour le joueur 1 qui est en  (5,6)  et dont l'objectif est 'B1':  (nx.has_path(graphe, (5,6), 'B1'))
-
         """
         placer_mur        
         pour le joueur spécifié, placer un mur à la position spécifiée
@@ -401,6 +360,7 @@ class Quoridor:
             joueur {int} -- Le numéro du joueur (1 ou 2)
             position {tuple} -- le tuple (x, y) de la position du mur
             orientation {str} -- l'orientation du mur: 'horizontal' ou 'vertical'
+        Return: None
         """
         # définir les objectifs de chaque joueurs
         objectif = ['B1', 'B2']
@@ -428,7 +388,6 @@ class Quoridor:
                 self.murv
             )
             # vérifier si placer ce mur enfermerais un joueur
-            # TODO: itérer pour vérifier pour chaque joueurs
             for i in range(2):
                 if not(nx.has_path(graphe, (self.joueurs[i]['pos']), objectif[i])):
                     raise QuoridorError("ce coup enfermerait un joueur")
@@ -470,6 +429,15 @@ class TestQuoridor(unittest.TestCase):
     
     def test__init__(self):
         """test la fonction __init
+            Cas à tester:
+                - Création d'une partie nouvelle
+                - Création d'une partie existante
+                - QuoridorError si 'joueur' n'est pas de longueur 2
+                - QuoridorError si le nombre de murs plaçable est 0 > n >10
+                - QuoridorError si la position d'un joueur est invalide
+                - QuoridorError si l'argument 'mur' n'est pas un dictionnaire si présent
+                - QuoridorError si le total des murs placés et plaçables n'est pas 20
+                - QuoridorError si la position d'un mur est invalide
         """
         # Dresser des tableaux connus pour des constructions connues
         nouveau_jeu = ("légende: 1=foo 2=bar\n" +
@@ -685,11 +653,13 @@ class TestQuoridor(unittest.TestCase):
                                })
 
 
-    #def test__str__(self):
-
-
     def test_déplacer_jeton(self):
-        """test_déplacer_jeton
+        """ Test de la fonction déplacer_jeton
+            Cas à tester:
+                - déplacement des deux joueurs fonctionne bien
+                - QuoridorError si le joueur indiqué est invalide
+                - QuoridorError si la position est hors des limites du jeu
+                - QuoridorError si la position n'est pas accessible au joueur
         """
         etat_partie = {
                     "joueurs": [
@@ -744,7 +714,9 @@ class TestQuoridor(unittest.TestCase):
 
 
     def test_état_partie(self):
-        """test_état_partie
+        """ Test la fonction état_partie
+            Cas à tester:
+                - La fonction retourne le bon résultat
         """
         nouvelle_partie_etat = {
                                     "joueurs": [
@@ -762,7 +734,11 @@ class TestQuoridor(unittest.TestCase):
 
 
     def test_jouer_coup(self):
-        """test_jopuer_coup
+        """ Test la fonction jouer_coup
+            Cas à tester:
+                - La fonction joue le bon coup automatiquement
+                - QuoridorError si le numéro du joueur est invalide
+                - QuoridorError si la partie est déjà terminée
         """
         partie_terminee_etat = {
                                     "joueurs": [
@@ -778,12 +754,16 @@ class TestQuoridor(unittest.TestCase):
         jeu_nouveau = Quoridor(["joueur1", "joueur2"])
         self.assertRaisesRegex(QuoridorError, "joueur invalide!", jeu_nouveau.jouer_coup, 5)
         # tester l'erreur soulevée l'orsqu'on cherche à jouer un coup alors que la partie est déjà terminée
-        jeu_termine = Quoridor(partie_terminee_etat['joueurs'], partie_terminee_etat['murs'])     
-        self.assertRaisesRegex(QuoridorError, "La partie est déjà terminée!", jeu_termine.jouer_coup, 1)
-        # TODO: tester le fonctionnement sans erreurs   
+        jeu_termine = Quoridor(partie_terminee_etat['joueurs'], partie_terminee_etat['murs'])
+        self.assertRaisesRegex(QuoridorError, "La partie est déjà terminée!", jeu_termine.jouer_coup, 1) 
 
 
     def test_partie_terminée(self):
+        """ Test de la fonction partie_terminée
+            Cas à tester:
+                - La fonction retourne False si la partie n'est pas terminée
+                - La fonction retourne le nom du joueur qui a gagné si la partie est terminée
+        """
         partie_terminee1_etat = {
                                     "joueurs": [
                                         {"nom": "joueur1", "murs": 7, "pos": (5, 9)},
@@ -815,6 +795,14 @@ class TestQuoridor(unittest.TestCase):
 
     
     def test_placer_mur(self):
+        """ Test de la fonction placer_mur
+            Cas à tester:
+                - Les murs horizontaux et verticaux sont placés correctement
+                - QuoridorError si le numéro du joueur n'est pas bon
+                - QuoridorError si un mur occupe déjà la position
+                - QuoridorError si la position est invalide pour l'horientation
+                - QuoridorError si le joueur a déjà placé tous ses murs
+        """
         jeu1_etat = {
                                     "joueurs": [
                                         {"nom": "joueur1", "murs": 9, "pos": (5, 1)},

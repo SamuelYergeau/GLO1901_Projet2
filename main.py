@@ -293,6 +293,9 @@ if __name__ == "__main__":
         boucler()'''
 
 def loop(joueurs, jeu):
+    """loop
+        Simple fonction pour tester quoridor.py
+    """
     while True:
         # Itérer sur les deux joueurs
         for n in range(1,3):
