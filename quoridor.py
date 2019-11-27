@@ -406,7 +406,7 @@ class Quoridor:
         # Si le mur est horizontal
         if orientation == 'horizontal':
             # vérifier si les positions sont dans les limites du jeu
-            if 1 > position[0] > 8 or 2 > position[1] > 9:
+            if not(1 <= position[0] <= 8) or not(2 <= position[1] <= 9):
                 raise QuoridorError("position du mur invalide!")
             # vérifier si l'emplacement est déjà occupé
             if (position[0], position[1]) in self.murh:
@@ -420,10 +420,11 @@ class Quoridor:
                 (self.murh + [position]),
                 self.murv
             )
-            # vérifier si placer ce mur enfermerais le joueur
+            # vérifier si placer ce mur enfermerais un joueur
             # TODO: itérer pour vérifier pour chaque joueurs
-            if not(nx.has_path(graphe, (self.joueurs[(joueur - 1)]['pos']), objectif[(joueur - 1)])):
-                raise QuoridorError("ce coup enfermerait un joueur")
+            for i in range(2):
+                if not(nx.has_path(graphe, (self.joueurs[i]['pos']), objectif[i])):
+                    raise QuoridorError("ce coup enfermerait un joueur")
             # placer le mur
             self.murh += [position]
             # retirer un mur des murs plaçables du joueurs
@@ -431,7 +432,7 @@ class Quoridor:
         # Si c'est un mur vertical
         elif orientation == 'vertical':
             # vérifier si les positions sont dans les limites du jeu
-            if 2 > position[0] > 9 or 1 > position[1] > 8:
+            if not(2 <= position[0] <= 9) or not(1 <= position[1] <= 8):
                 raise QuoridorError("position du mur invalide!")
             # vérifier si l'emplacement est déjà occupé
             if (position[0], position[1]) in self.murv:
@@ -446,9 +447,9 @@ class Quoridor:
                 (self.murv + [position])
             )
             # vérifier si placer ce mur enfermerais le joueur
-            # TODO: itérer pour vérifier pour chaque joueurs
-            if not(nx.has_path(graphe, (self.joueurs[(joueur - 1)]['pos']), objectif[(joueur - 1)])):
-                raise QuoridorError("ce coup enfermerait un joueur")
+            for i in range(2):
+                if not(nx.has_path(graphe, (self.joueurs[i]['pos']), objectif[i])):
+                    raise QuoridorError("ce coup enfermerait un joueur")
             # placer le mur
             self.murv += [position]
             # retirer un mur des murs plaçables du joueurs
@@ -634,11 +635,11 @@ class TestQuoridor(unittest.TestCase):
                                 }
         jeu3_etat = {
                                     "joueurs": [
-                                        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
-                                        {"nom": "joueur2", "murs": 0, "pos": (5, 7)}
+                                        {"nom": "joueur1", "murs": 7, "pos": (5, 3)},
+                                        {"nom": "joueur2", "murs": 0, "pos": (3, 5)}
                                     ],
                                     "murs": {
-                                        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
+                                        "horizontaux": [(4, 4), (2, 6), (4, 2), (5, 8), (7, 8)],
                                         "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7), (2, 2), (2, 3), (2, 4)]
                                     }
                                 }
@@ -660,6 +661,21 @@ class TestQuoridor(unittest.TestCase):
         self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!", jeu3.placer_mur, 1, (4, 4), 'vertical')
         # Position décallée
         self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!", jeu3.placer_mur, 1, (4, 5), 'vertical')
+        # Tester l'erreur si l'orientation n'est pas valide
+        self.assertRaisesRegex(QuoridorError, "orientation invalide!", jeu3.placer_mur, 1, (4, 5), 'diagonale')
+        # Tester l'erreur si la position est hors des limites du jeu pour un mur horizontal
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (0, 5), 'horizontal')
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (9, 5), 'horizontal')
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (5, 1), 'horizontal')
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (5, 10), 'horizontal')
+        # Tester l'erreur si la position est hors des limites du jeu pour un mur vertical
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (1, 5), 'vertical')
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (10, 5), 'vertical')
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (5, 0), 'vertical')
+        self.assertRaisesRegex(QuoridorError, "position du mur invalide!", jeu1.placer_mur, 1, (5, 9), 'vertical')
+        # tester l'erreur si le coup enfermerait le joueur
+        self.assertRaisesRegex(nx.exception.NetworkXError, "", jeu3.placer_mur, 1, (3, 3), 'horizontal')
+        self.assertRaisesRegex(nx.exception.NetworkXError, "", jeu3.placer_mur, 1, (4, 2), 'vertical')
 
 
 #Lancer la batterie de tests unitaires l'orsque ce module est lancé en tant que main (pas importé)
