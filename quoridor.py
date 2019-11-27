@@ -167,7 +167,7 @@ class Quoridor:
                 self.joueurs[0]['murs'] +
                 self.joueurs[1]['murs']) != 20:
             raise QuoridorError("mauvaise quantité totale de murs!")
-  
+
 
     def __str__(self):
         """
@@ -500,8 +500,8 @@ class TestQuoridor(unittest.TestCase):
         self.assertEqual(str(Quoridor(["foo", "bar"])), nouveau_jeu)
         # Test de création d'une partie déjà existante
         self.assertEqual(str(Quoridor(partie_existante_etat['joueurs'],
-                                      partie_existante_etat['murs'])),
-                                      partie_existante_tableau)
+        partie_existante_etat['murs'])),
+        partie_existante_tableau)
         # Test de l'erreur soulevée si l'argument 'joueur' n'est pas itérable
         self.assertRaisesRegex(QuoridorError, "joueurs n'est pas iterable!", Quoridor, 2)
         # Test de l'erreur soulevée si l'argument 'joueur' n'est pas de longueur 2
@@ -591,7 +591,7 @@ class TestQuoridor(unittest.TestCase):
                                {
                                    "horizontaux": [(9, 5)],
                                    "verticaux": [(5, 5)]
-                               })                                        
+                               })                                      
         self.assertRaisesRegex(QuoridorError,
                                "position du mur non-valide!", Quoridor,
                                [
@@ -667,25 +667,25 @@ class TestQuoridor(unittest.TestCase):
                 - QuoridorError si la position n'est pas accessible au joueur
         """
         etat_partie = {
-                    "joueurs": [
-                        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
-                        {"nom": "joueur2", "murs": 3, "pos": (5, 7)}
-                    ],
-                    "murs": {
-                        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
-                        "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
-                    }
-                }
+        "joueurs": [
+        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
+        {"nom": "joueur2", "murs": 3, "pos": (5, 7)}
+        ],
+        "murs": {
+        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
+        "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
+        }
+        }
         etat_partie2 = {
-                    "joueurs": [
-                        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
-                        {"nom": "joueur2", "murs": 3, "pos": (5, 5)}
-                    ],
-                    "murs": {
-                        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
-                        "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
-                    }
-                }
+        "joueurs": [
+        {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
+        {"nom": "joueur2", "murs": 3, "pos": (5, 5)}
+        ],
+        "murs": {
+        "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
+        "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
+        }
+        }
         etat_partie3 = {
                     "joueurs": [
                         {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
@@ -868,7 +868,7 @@ class TestQuoridor(unittest.TestCase):
         self.assertEqual(jeu1.état_partie(), jeu2_etat)
         # Tester l'erreur si le numéro du joueur n'est pas bon
         self.assertRaisesRegex(QuoridorError, "joueur invalide!",
-                              jeu1.placer_mur, 5, (2, 2), 'horizontal')
+                               jeu1.placer_mur, 5, (2, 2), 'horizontal')
         # Tester l'erreur si le joueur ne peut plus placer de murs
         jeu3 = Quoridor(jeu3_etat['joueurs'], jeu3_etat['murs'])
         self.assertRaisesRegex(QuoridorError, "le joueur ne peut plus placer de murs!",
@@ -878,37 +878,37 @@ class TestQuoridor(unittest.TestCase):
                                jeu3.placer_mur, 1, (4, 4), 'horizontal')
         # Position décallée
         self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!",
-                              jeu3.placer_mur, 1, (5, 4), 'horizontal')
+                               jeu3.placer_mur, 1, (5, 4), 'horizontal')
         # Tester l'erreur si l'emplacement est déjà occupé pour un mur vertical --> position exacte
         self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!",
                                jeu3.placer_mur, 1, (4, 4), 'vertical')
         # Position décallée
         self.assertRaisesRegex(QuoridorError, "Il y a déjà un mur!", 
-                              jeu3.placer_mur, 1, (4, 5), 'vertical')
+                               jeu3.placer_mur, 1, (4, 5), 'vertical')
         # Tester l'erreur si l'orientation n'est pas valide
         self.assertRaisesRegex(QuoridorError, "orientation invalide!",
-                              jeu3.placer_mur, 1, (4, 5), 'diagonale')
+                               jeu3.placer_mur, 1, (4, 5), 'diagonale')
         # Tester l'erreur si la position est hors des limites du jeu pour un mur horizontal
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!",
-                              jeu1.placer_mur, 1, (0, 5), 'horizontal')
+                               jeu1.placer_mur, 1, (0, 5), 'horizontal')
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!", 
-                              jeu1.placer_mur, 1, (9, 5), 'horizontal')
+                               jeu1.placer_mur, 1, (9, 5), 'horizontal')
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!", 
-                              jeu1.placer_mur, 1, (5, 1), 'horizontal')
+                               jeu1.placer_mur, 1, (5, 1), 'horizontal')
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!",
-                              jeu1.placer_mur, 1, (5, 10), 'horizontal')
+                               jeu1.placer_mur, 1, (5, 10), 'horizontal')
         # Tester l'erreur si la position est hors des limites du jeu pour un mur vertical
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!",
-                              jeu1.placer_mur, 1, (1, 5), 'vertical')
+                               jeu1.placer_mur, 1, (1, 5), 'vertical')
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!",
-                              jeu1.placer_mur, 1, (10, 5), 'vertical')
+                               jeu1.placer_mur, 1, (10, 5), 'vertical')
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!",
-                              jeu1.placer_mur, 1, (5, 0), 'vertical')
+                               jeu1.placer_mur, 1, (5, 0), 'vertical')
         self.assertRaisesRegex(QuoridorError, "position du mur invalide!",
                                jeu1.placer_mur, 1, (5, 9), 'vertical')
         # tester l'erreur si le coup enfermerait le joueur
         self.assertRaisesRegex(nx.exception.NetworkXError, "",
-                              jeu3.placer_mur, 1, (3, 3), 'horizontal')
+                               jeu3.placer_mur, 1, (3, 3), 'horizontal')
         self.assertRaisesRegex(nx.exception.NetworkXError, "", 
                                jeu3.placer_mur, 1, (4, 2), 'vertical')
 
