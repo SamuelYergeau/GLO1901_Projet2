@@ -292,30 +292,53 @@ if __name__ == "__main__":
         # boucler sur la logique de la partie
         boucler()'''
 
+def loop(joueurs, jeu):
+    while True:
+        # Itérer sur les deux joueurs
+        for n in range(1,3):
+            try:
+                # afficher le jeu
+                print(jeu)
+                # jouer le coup du joueur 1
+                if joueurs[(n - 1)] == "robot":
+                    jeu.jouer_coup(n)
+                else:
+                    print("indiquer le type de coup à jouer")
+                    tcoup = input("D, MH ou MH: ").upper()
+                    posx = int(input("position en x du coup: "))
+                    posy = int(input("position en y du coup: "))
+                    # agir selon le type de coup
+                    if tcoup == 'D':
+                        jeu.déplacer_jeton(n, (posx, posy))
+                    elif tcoup == 'MH':
+                        jeu.placer_mur(n, (posx, posy), 'horizontal')
+                    elif tcoup == 'MV':
+                        jeu.placer_mur(n, (posx, posy), 'vertical')
+                    else:
+                        print("type de coup invalide")
+                        continue
+                # tester si la partie est terminer
+                gagnant = jeu.partie_terminée()
+                if gagnant:
+                    print('\n' + '~' * 39)
+                    print("LA PARTIE EST TERMINÉE!")
+                    print("{} À GAGNÉ!".format(gagnant))
+                    print('~' * 39 + '\n')
+                    print(jeu)
+                    return
+            except quoridor.QuoridorError as qe:
+                print(qe)
+                continue
 
-# fonction pour tester le projet 2
-def tester_full_ai_game():
-    """
-    Test Si le AI peut faire une partie complète
-    Résultat: FONCTIONNEL (avec la fonction stupide qui fais juste des déplacements)
-    """
-    q = quoridor.Quoridor(["bot1", "bot2"])
-    print(q)
-    while(True):
-        for i in range(1,3):
-            q.jouer_coup(i)
-            print(q)
-            if q.partie_terminée():
-                return "bot{} à gagné!".format(str(i))
-debutee = quoridor.Quoridor(["Sampai", "Senpai"])
-#terminee = quoridor.Quoridor(finished_game['joueurs'], finished_game['murs'])
-#print('str debutée:', debutee) #tester __init__ et __str__ --> OK
-#print('str terminée:', str(terminee))
-#print('etat_partie:', debutee.état_partie()) # tester état_partie --> OK
-#print('eteminé_partie:', terminee.partie_terminée()) # tester partie_terminée --> OK
-#debutee.déplacer_jeton(1, (5, 2))   # Tester déplacer_jeton --> OK
-#print('str jeton déplacé:', debutee)
-#debutee.placer_mur(1, (5, 5), 'horizontal') # Tester placer_mur --> OK
-#print('str jmur placé:', debutee)
-#debutee.jouer_coup(1) # Tester jouer_coup --> OK
-#print(tester_full_ai_game()) # Tester si le AI peut jouer une partie complète contre lui-même --> OK
+
+#swag lines
+print('\n' + '~' * 39)
+print("BIENVENU DANS QUORIDOR!")
+print('~' * 39 + '\n')
+# obtenir le nom des deux joueurs
+print("veuillez entrer le nom des joueurs:")
+joueur1 = input("nom du joueur1: ")
+joueur2 = input("nom du joueur2: ")
+# demarrer une nouvelle partie
+jeu = quoridor.Quoridor([joueur1, joueur2])
+loop([joueur1, joueur2], jeu)

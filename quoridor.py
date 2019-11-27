@@ -464,9 +464,6 @@ class Quoridor:
             raise QuoridorError("orientation invalide!")
 
 
-#NOTE: J'ai changé le nom de la classe pour que celle-ci soit plus significative
-#NOTE: les noms des fonctions doivent obligatoirement commencer par le mot "test" avec un t MINUSCULE
-#NOTE: les fonctions de tests n'ont pas d'arguments autre que self car elles doivent contenir toutes les états de tests possible à l'intérieur d'elles
 class TestQuoridor(unittest.TestCase):
     
     def test__init__(self):
@@ -685,10 +682,10 @@ class TestQuoridor(unittest.TestCase):
                                     "verticaux": [(5, 9)]
                                })
 
-    
 
     #def test__str__(self):
-    
+
+
     def test_déplacer_jeton(self):
         """test_déplacer_jeton
         """
@@ -744,8 +741,6 @@ class TestQuoridor(unittest.TestCase):
         self.assertEqual(jeu.état_partie(), etat_partie3)
 
 
-        #NOTE: n'oubliez pas de tester TOUTEs les situations possibles. Il faut bien entendu tester celles où la fonction fonctionne bien.
-    
     def test_état_partie(self):
         """test_état_partie
         """
@@ -762,6 +757,7 @@ class TestQuoridor(unittest.TestCase):
         # Tester si la fonction retourne la bonne affichage
         nouvellepartie = Quoridor(["joueur1", "joueur2"])
         self.assertEqual(nouvellepartie.état_partie(), nouvelle_partie_etat)
+
  
     def test_jouer_coup(self):
         """test_jopuer_coup
