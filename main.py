@@ -40,7 +40,7 @@ def line_namer(i):
         id {int}
             the current line we're at
     """
-    r = []
+    r = ()
     if (((i + 1) // 2) + 1) < 10:
         r = ["{} |".format(((i + 1) // 2) + 1)]
     else:
