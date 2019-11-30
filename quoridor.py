@@ -8,18 +8,12 @@ contient les classes:
 import unittest
 import copy
 import networkx as nx
-import matplotlib.pyplot as plt
 
 
-
-def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
-    """
-    Crée le graphe des déplacements admissibles pour les joueurs.
-
-    :param joueurs: une liste des positions (x,y) des joueurs.
-    :param murs_horizontaux: une liste des positions (x,y) des murs horizontaux.
-    :param murs_verticaux: une liste des positions (x,y) des murs verticaux.
-    :returns: le graphe bidirectionnel (en networkX) des déplacements admissibles.
+def graphe_helper(joueurs, murs_horizontaux, murs_verticaux):
+    """fonction pour aider la fonction construire_graphe
+        avec son problème de trop de branches
+        Simple fonction de segmentation
     """
     graphe = nx.DiGraph()
 
@@ -50,6 +44,20 @@ def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
         graphe.remove_edge((x, y), (x-1, y))
         graphe.remove_edge((x-1, y+1), (x, y+1))
         graphe.remove_edge((x, y+1), (x-1, y+1))
+
+    return graphe
+
+
+def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
+    """
+    Crée le graphe des déplacements admissibles pour les joueurs.
+
+    :param joueurs: une liste des positions (x,y) des joueurs.
+    :param murs_horizontaux: une liste des positions (x,y) des murs horizontaux.
+    :param murs_verticaux: une liste des positions (x,y) des murs verticaux.
+    :returns: le graphe bidirectionnel (en networkX) des déplacements admissibles.
+    """
+    graphe = graphe_helper(joueurs, murs_horizontaux, murs_verticaux)
 
     # retirer tous les arcs qui pointent vers les positions des joueurs
     # et ajouter les sauts en ligne droite ou en diagonale, selon le cas
@@ -87,6 +95,32 @@ class QuoridorError(Exception):
     """
 
 
+def check_type(t, variable, message):
+    """Simple fonction pour vérifier le type d'une variable
+        Sers simplement à alléger les fonctions qui ont un
+        trop de branches
+    
+    Arguments:
+        type {[type]} -- le type de variable à tester
+        variable {} -- la variable en question
+        message {String} -- le message à soulever si la faux
+    """
+    if not isinstance(variable, t):
+        raise QuoridorError(message)
+
+
+def check_iterable(j):
+    """Simple fonction pour alléger le nombre 
+    de branches de __init__
+    """
+    try:
+        iter(j)
+    except TypeError:
+        raise QuoridorError("joueurs n'est pas iterable!")
+    if len(j) != 2:
+        raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
+
+
 class Quoridor:
     """class quoridor"""
 
@@ -120,8 +154,10 @@ class Quoridor:
         # vérifier si un dictionnaire de murs est présent
         if murs:
             # vérifier si murs est un tuple
-            if not isinstance(cmurs, dict):
-                raise QuoridorError("murs n'est pas un dictionnaire!")
+            #TODO: remove
+            #if not isinstance(cmurs, dict):
+            #    raise QuoridorError("murs n'est pas un dictionnaire!")
+            check_type(dict, cmurs, "murs n'est pas un dictionnaire!")
             # itérer sur chaque mur horizontal
             for mur in cmurs['horizontaux']:
                 # Vérifier si la position du mur est valide
@@ -134,12 +170,14 @@ class Quoridor:
                     raise QuoridorError("position du mur non-valide!")
                 self.murv += [tuple(mur)]
         # vérifier que joueurs est itérable et de longueur 2
-        try:
-            iter(cjoueurs)
-        except TypeError:
-            raise QuoridorError("joueurs n'est pas iterable!")
-        if len(cjoueurs) != 2:
-            raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
+        # TODO: remove
+        #try:
+        #    iter(cjoueurs)
+        #except TypeError:
+        #    raise QuoridorError("joueurs n'est pas iterable!")
+        #if len(cjoueurs) != 2:
+        #    raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
+        check_iterable(cjoueurs)
         # itérer sur chaque joueur
         for numero, joueur in enumerate(cjoueurs):
             # Vérifier s'il s'agit d'un string ou d'un dictionnaire
@@ -187,9 +225,10 @@ class Quoridor:
         game_pos_y = range(((board_positions - 1) * 2), -1, -2)
         # Création du tableau de jeu
         # en-tête
-        légende = "légende: 1={} 2={}\n".format(self.joueurs[0]['nom'], self.joueurs[1]['nom'])
-        légende += (' ' * 3) + ('-' * spacing_horizontal) + '\n'
-        board = [légende]
+        board = [
+            "légende: 1={} 2={}\n".format(self.joueurs[0]['nom'], self.joueurs[1]['nom']) +
+            (' ' * 3) + ('-' * spacing_horizontal) + '\n'
+        ]
         # game board
         for i in reversed(range((board_positions * 2) - 1)):
             if (i % 2) == 0:
@@ -358,6 +397,21 @@ class Quoridor:
         return False
 
 
+    def check_position(self, position):
+        """simple fonction pour alléger le nombre
+        de branches dans placer_mur
+        """
+        # vérifier si les positions sont dans les limites du jeu
+        if not 1 <= position[0] <= 8 or not 2 <= position[1] <= 9:
+            raise QuoridorError("position du mur invalide!")
+        # vérifier si l'emplacement est déjà occupé
+        if (position[0], position[1]) in self.murh:
+            raise QuoridorError("Il y a déjà un mur!")
+        # Prendre en compte le décalage des murs
+        if ((position[0] - 1), position[1]) in self.murh:
+            raise QuoridorError("Il y a déjà un mur!")
+
+
     def placer_mur(self, joueur: int, position: tuple, orientation: str):
         """
         placer_mur
@@ -378,15 +432,7 @@ class Quoridor:
             raise QuoridorError("le joueur ne peut plus placer de murs!")
         # Si le mur est horizontal
         if orientation == 'horizontal':
-            # vérifier si les positions sont dans les limites du jeu
-            if not 1 <= position[0] <= 8 or not 2 <= position[1] <= 9:
-                raise QuoridorError("position du mur invalide!")
-            # vérifier si l'emplacement est déjà occupé
-            if (position[0], position[1]) in self.murh:
-                raise QuoridorError("Il y a déjà un mur!")
-            # Prendre en compte le décalage des murs
-            if ((position[0] - 1), position[1]) in self.murh:
-                raise QuoridorError("Il y a déjà un mur!")
+            self.check_position(position)
             # créer un graphe des mouvements possible à jouer avec le mur ajouté
             graphe = construire_graphe(
                 [joueur['pos'] for joueur in self.joueurs],
