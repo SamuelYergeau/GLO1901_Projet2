@@ -85,7 +85,6 @@ class QuoridorError(Exception):
     Arguments:
         Exception {[type]} -- [description]
     """
-    pass
 
 
 class Quoridor:
@@ -136,8 +135,8 @@ class Quoridor:
                 self.murv += [tuple(mur)]
         # vérifier que joueurs est itérable et de longueur 2
         try:
-            iterable = iter(cjoueurs)
-        except TypeError as te:
+            iter(cjoueurs)
+        except TypeError:
             raise QuoridorError("joueurs n'est pas iterable!")
         if len(cjoueurs) != 2:
             raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
@@ -266,7 +265,7 @@ class Quoridor:
         Return: None
         """
         # Vérifier que le joueur est valide
-        if joueur != 1 and joueur != 2:
+        if joueur not in (1, 2):
             raise QuoridorError("joueur invalide!")
         # Vérifier que la position du joueur est valide
         if not 1 <= position[0] <= 9 or not 1 <= position[1] <= 9:
@@ -278,7 +277,7 @@ class Quoridor:
             self.murv
         )
         # vérifier si le mouvement est valide
-        if not position in list(graphe.successors((self.joueurs[(joueur - 1)]['pos']))):
+        if position not in list(graphe.successors((self.joueurs[(joueur - 1)]['pos']))):
             raise QuoridorError("mouvement invalide!")
         # Changer la position du joueur
         self.joueurs[(joueur - 1)]['pos'] = position
@@ -323,10 +322,10 @@ class Quoridor:
         # objectifs
         objectifs = ['B1', 'B2']
         # Vérifier que le joueur est valide
-        if joueur != 1 and joueur != 2:
+        if joueur not in (1, 2):
             raise QuoridorError("joueur invalide!")
         # Vérifier si la partie est déjà terminée
-        if self.partie_terminée() != False:
+        if self.partie_terminée():
             raise QuoridorError("La partie est déjà terminée!")
         # créer un graphe des mouvements possible à jouer
         graphe = construire_graphe(
@@ -372,7 +371,7 @@ class Quoridor:
         # définir les objectifs de chaque joueurs
         objectif = ['B1', 'B2']
         # Vérifier que le joueur est valide
-        if joueur != 1 and joueur != 2:
+        if joueur not in (1, 2):
             raise QuoridorError("joueur invalide!")
         # Vérifier si le joueur ne peut plus placer de murs
         if self.joueurs[(joueur - 1)]['murs'] <= 0:
@@ -594,7 +593,7 @@ class TestQuoridor(unittest.TestCase):
                                {
                                    "horizontaux": [(9, 5)],
                                    "verticaux": [(5, 5)]
-                               })                        
+                               })
         self.assertRaisesRegex(QuoridorError,
                                "position du mur non-valide!", Quoridor,
                                [
@@ -677,8 +676,7 @@ class TestQuoridor(unittest.TestCase):
             "murs": {
                 "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
                 "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
-            }
-            }
+            }}
         etat_partie2 = {
             "joueurs": [
                 {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
@@ -687,8 +685,7 @@ class TestQuoridor(unittest.TestCase):
             "murs": {
                 "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
                 "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
-            }
-            }
+            }}
         etat_partie3 = {
             "joueurs": [
                 {"nom": "joueur1", "murs": 7, "pos": (5, 6)},
@@ -697,8 +694,7 @@ class TestQuoridor(unittest.TestCase):
             "murs": {
                 "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
                 "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
-            }
-            }
+            }}
         nouveaujeu = Quoridor(["joueur1", "joueur2"])
         # Tester l'erreur soulevée si le joueur indiqué est invalide
         self.assertRaisesRegex(QuoridorError,
@@ -771,11 +767,11 @@ class TestQuoridor(unittest.TestCase):
             "joueurs": [
                 {"nom": "joueur1", "murs": 7, "pos": (5, 9)},
                 {"nom": "joueur2", "murs": 3, "pos": (6, 9)}
-                                ],
+            ],
             "murs": {
                 "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
                 "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
-                                }}
+            }}
         # Tester l'erreur soulevée lorsqu'on donne un joueur invalide
         jeu_nouveau = Quoridor(["joueur1", "joueur2"])
         self.assertRaisesRegex(QuoridorError,
@@ -800,20 +796,20 @@ class TestQuoridor(unittest.TestCase):
             "joueurs": [
                 {"nom": "joueur1", "murs": 7, "pos": (5, 9)},
                 {"nom": "joueur2", "murs": 3, "pos": (6, 9)}
-                                ],
+            ],
             "murs": {
                 "horizontaux": [(4, 4), (2, 6), (3, 8), (5, 8), (7, 8)],
                 "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7)]
-                                }}
+            }}
         partie_terminee2_etat = {
             "joueurs": [
                 {"nom": "joueur1", "murs": 7, "pos": (6, 1)},
                 {"nom": "joueur2", "murs": 3, "pos": (5, 1)}
-                       ],
+            ],
             "murs": {
                 "horizontaux": [[4, 4], [2, 6], [3, 8], [5, 8], [7, 8]],
                 "verticaux": [[6, 2], [4, 4], [2, 5], [7, 5], [7, 7]]
-                    }}
+            }}
         # Tester que la fonction retourne False si la partie n'est pas terminée
         jeu_pas_fini = Quoridor(['joueur1', 'joueur2'])
         self.assertEqual(jeu_pas_fini.partie_terminée(), False)
@@ -837,33 +833,30 @@ class TestQuoridor(unittest.TestCase):
             "joueurs": [
                 {"nom": "joueur1", "murs": 9, "pos": (5, 1)},
                 {"nom": "joueur2", "murs": 9, "pos": (5, 9)}
-                                    ],
+            ],
             "murs": {
                 "horizontaux": [(4, 4)],
                 "verticaux": [(6, 6)]
-                    }
-        }
+            }}
         jeu2_etat = {
             "joueurs": [
                 {"nom": "joueur1", "murs": 8, "pos": (5, 1)},
                 {"nom": "joueur2", "murs": 8, "pos": (5, 9)}
-                       ],
+            ],
             "murs": {
                 "horizontaux": [(4, 4), (5, 5)],
                 "verticaux": [(6, 6), (7, 7)]
-                    }
-        }
+            }}
         jeu3_etat = {
             "joueurs": [
                 {"nom": "joueur1", "murs": 7, "pos": (5, 3)},
                 {"nom": "joueur2", "murs": 0, "pos": (3, 5)}
-                       ],
+            ],
             "murs": {
                 "horizontaux": [(4, 4), (2, 6), (4, 2), (5, 8), (7, 8)],
                 "verticaux": [(6, 2), (4, 4), (2, 5), (7, 5), (7, 7),
                               (2, 2), (2, 3), (2, 4)]
-                    }
-                    }
+            }}
         jeu1 = Quoridor(jeu1_etat['joueurs'], jeu1_etat['murs'])
         # Tester si le mur est bien placé avec les 2 joueurs
         jeu1.placer_mur(1, (5, 5), 'horizontal')
