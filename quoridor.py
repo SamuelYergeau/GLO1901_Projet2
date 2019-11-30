@@ -10,7 +10,7 @@ import copy
 import networkx as nx
 
 
-def graphe_helper(joueurs, murs_horizontaux, murs_verticaux):
+def graphe_helper(murs_horizontaux, murs_verticaux):
     """fonction pour aider la fonction construire_graphe
         avec son problème de trop de branches
         Simple fonction de segmentation
@@ -57,7 +57,7 @@ def construire_graphe(joueurs, murs_horizontaux, murs_verticaux):
     :param murs_verticaux: une liste des positions (x,y) des murs verticaux.
     :returns: le graphe bidirectionnel (en networkX) des déplacements admissibles.
     """
-    graphe = graphe_helper(joueurs, murs_horizontaux, murs_verticaux)
+    graphe = graphe_helper(murs_horizontaux, murs_verticaux)
 
     # retirer tous les arcs qui pointent vers les positions des joueurs
     # et ajouter les sauts en ligne droite ou en diagonale, selon le cas
@@ -99,7 +99,6 @@ def check_type(t, variable, message):
     """Simple fonction pour vérifier le type d'une variable
         Sers simplement à alléger les fonctions qui ont un
         trop de branches
-    
     Arguments:
         type {[type]} -- le type de variable à tester
         variable {} -- la variable en question
@@ -110,7 +109,7 @@ def check_type(t, variable, message):
 
 
 def check_iterable(j):
-    """Simple fonction pour alléger le nombre 
+    """Simple fonction pour alléger le nombre
     de branches de __init__
     """
     try:
@@ -119,6 +118,42 @@ def check_iterable(j):
         raise QuoridorError("joueurs n'est pas iterable!")
     if len(j) != 2:
         raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
+
+
+def check_total_murs(joueurs, murs):
+    """Fonction pour vérifier à la place de __init__ si
+    le nombre total de murs donne 20    
+    Arguments:
+        joueurs {[type]} -- [description]
+        murs {[type]} -- [description]
+    """
+    murh = 0
+    murv = 0
+    murj1 = 0
+    murj2 = 0
+    # Vérifier s'il y a des murs
+    if murs != None:
+        # s'assurer qu'il s'agit bien d'un citctionnaire
+        check_type(dict, murs, "murs n'est pas un dictionnaire!")
+        murh = len(murs['horizontaux'])
+        murv = len(murs['verticaux'])
+    # vérifier que joueurs est valide
+    check_iterable(joueurs)
+    if isinstance(joueurs[0], dict):
+        # vérifier que les murs sont legit
+        for joueur in joueurs:
+            if  not 0 <= joueur['murs'] <= 10:
+                raise QuoridorError("mauvais nombre de murs!")
+        murj1 = joueurs[0]['murs']
+        murj2 = joueurs[1]['murs']
+    elif isinstance(joueurs[0], str):
+        murj1 = 10
+        murj2 = 10
+    else:
+        raise QuoridorError("joueurs n'est ni des dictionnaires ni des string!")
+    if (murh + murv + murj1 + murj2) != 20:
+        print("\nmauvaise qt de murs:")
+        raise QuoridorError("mauvaise quantité totale de murs!")
 
 
 class Quoridor:
@@ -151,12 +186,11 @@ class Quoridor:
         #faire un copie profonde de ce qui a besoin d'être copié
         cjoueurs = copy.deepcopy(joueurs)
         cmurs = copy.deepcopy(murs)
+        # Vérifier si le nombre totab de murs donne 20
+        check_total_murs(cjoueurs, cmurs)
         # vérifier si un dictionnaire de murs est présent
         if murs:
             # vérifier si murs est un tuple
-            #TODO: remove
-            #if not isinstance(cmurs, dict):
-            #    raise QuoridorError("murs n'est pas un dictionnaire!")
             check_type(dict, cmurs, "murs n'est pas un dictionnaire!")
             # itérer sur chaque mur horizontal
             for mur in cmurs['horizontaux']:
@@ -170,13 +204,6 @@ class Quoridor:
                     raise QuoridorError("position du mur non-valide!")
                 self.murv += [tuple(mur)]
         # vérifier que joueurs est itérable et de longueur 2
-        # TODO: remove
-        #try:
-        #    iter(cjoueurs)
-        #except TypeError:
-        #    raise QuoridorError("joueurs n'est pas iterable!")
-        #if len(cjoueurs) != 2:
-        #    raise QuoridorError("Il n'y a pas exactement 2 joueurs!")
         check_iterable(cjoueurs)
         # itérer sur chaque joueur
         for numero, joueur in enumerate(cjoueurs):
@@ -199,13 +226,6 @@ class Quoridor:
                 self.joueurs[numero] = joueur
                 # vérifier que la position du joueur est storée comme tuple
                 self.joueurs[numero]['pos'] = tuple(self.joueurs[numero]['pos'])
-        # Vérifier que le total des murs donne 20
-        # TODO: placer avant la logique
-        if (len(self.murh) +
-                len(self.murv) +
-                self.joueurs[0]['murs'] +
-                self.joueurs[1]['murs']) != 20:
-            raise QuoridorError("mauvaise quantité totale de murs!")
 
 
     def __str__(self):
