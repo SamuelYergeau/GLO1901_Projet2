@@ -122,7 +122,7 @@ def check_iterable(j):
 
 def check_total_murs(joueurs, murs):
     """Fonction pour vérifier à la place de __init__ si
-    le nombre total de murs donne 20    
+    le nombre total de murs donne 20
     Arguments:
         joueurs {[type]} -- [description]
         murs {[type]} -- [description]
@@ -132,7 +132,7 @@ def check_total_murs(joueurs, murs):
     murj1 = 0
     murj2 = 0
     # Vérifier s'il y a des murs
-    if murs != None:
+    if murs:
         # s'assurer qu'il s'agit bien d'un citctionnaire
         check_type(dict, murs, "murs n'est pas un dictionnaire!")
         murh = len(murs['horizontaux'])
